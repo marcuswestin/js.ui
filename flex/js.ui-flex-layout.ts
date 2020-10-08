@@ -1,23 +1,20 @@
 // JS-UI Flex Layout
 ////////////////////
 
-import { makeElement } from "../js.ui-core"
+import { makeElement, Argument } from "../js.ui-core"
 import { Style } from "../style/js.ui-styles"
 
 
 // Flex elements
 ////////////////
 
-export let Row = (...args: UIArg) => makeFlexElement('row', ...args)
-export let Col = (...args: UIArg) => makeFlexElement('column', ...args)
+export let Row = (...args: Argument[]) => makeFlexElement('row', ...args)
+export let Col = (...args: Argument[]) => makeFlexElement('column', ...args)
 
-export let RowReverse = (...args: UIArg) => makeFlexElement('row-reverse', ...args)
-export let ColReverse = (...args: UIArg) => makeFlexElement('column-reverse', args)
+export let RowReverse = (...args: Argument[]) => makeFlexElement('row-reverse', ...args)
+export let ColReverse = (...args: Argument[]) => makeFlexElement('column-reverse', args)
 
-
-type UIArg = any
-
-function makeFlexElement(flexDirection: string, ...args: UIArg) {
+function makeFlexElement(flexDirection: string, ...args: Argument[]) {
 	let style = Style({ display: 'flex', flexDirection: flexDirection })
     return makeElement(`ui-${flexDirection}`, style, ...args)
 }

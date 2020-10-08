@@ -24,36 +24,54 @@ export let flags = {
     ENABLE_AUTO_KEYS: true,
 }
 
-export let makeElement = (tagName: string, ...args: UIArgs): UIElement => {
+export let makeElement = (tagName: string, ...args: Argument[]): Element => {
     return makeElement_(tagName, ...args)
 }
 
-export function Key(key: string): UIKey {
-    return new UIKey(key)
+export function Key(key: string): ElementKey {
+    return new ElementKey(key)
 }
 
-type UIArg = any
-type UIArgs = UIArg[]
-type UIProperty = any
-type UIProperties = {[ key: string ]: UIProperty }
-type UIElement = ReactElement | string | number | boolean  | symbol
-type UIChildren = UIElement[]
+class ElementKey {
+    readonly key: string
+    constructor(key: string) { this.key = key }
+}
+
+export type Argument = Element | Properties | ElementKey
+type Element = ReactElement | LabelElement
+type ElementChild = ReactElement | string
+type PropertyValue = any
+type Properties = {[ key: string ]: PropertyValue }
 
 // --- Internal ----------------------------------------------------
 ////////////////////////////////////////////////////////////////////
 
-class UIKey {
-    readonly key: string
-    constructor(key: string) { this.key = key }
+interface Stringable {
+    toString(): string
+}
+
+class LabelElement {
+    readonly value: string
+    constructor(value: Stringable) { this.value = value.toString() }
+}
+
+type UITextArgument = string | number | undefined | null
+
+export function Label(...args: UITextArgument[]): LabelElement {
+    return new LabelElement(args.join(' '))
+}
+
+export function Text(...args: UITextArgument[]): LabelElement {
+    return new LabelElement(args.join(' '))
 }
 
 // UI Element consctruction
 ///////////////////////////
 
-function makeElement_(tagName: string, ...args: UIArgs): UIElement {
+function makeElement_(tagName: string, ...args: Argument[]): Element {
 
-    var props: UIProperties = {}
-    var children: UIChildren = []
+    var props: Properties = {}
+    var children: ElementChild[] = []
 
     processArgsIntoPropsAndChildren(args, props, children)
 
@@ -86,42 +104,43 @@ function makeElement_(tagName: string, ...args: UIArgs): UIElement {
 // Process arguments
 ////////////////////
 
-function processArgsIntoPropsAndChildren(args: UIArgs, props: UIProperties, children: UIArgs) {
+function processArgsIntoPropsAndChildren(args: Argument[], props: Properties, children: ElementChild[]) {
     for (let i=0; i<args.length; i++) {
         let arg = args[i]
 
         if (React.isValidElement(arg)) {
             children.push(arg)
 
-        } else if (arg instanceof UIKey) {
+        } else if (arg instanceof LabelElement) {
+            children.push(arg.value)
+
+        } else if (arg instanceof ElementKey) {
             props['key'] = arg.key
 
-        } else if (isScalar(arg)) {
-            children.push(arg)
-
         } else if (Array.isArray(arg)) {
-            processArgsIntoPropsAndChildren(arg, props, children)
+            processArgsIntoPropsAndChildren(arg as Argument[], props, children)
 
-        } else if (isFunction(arg)) {
-            processArgsIntoPropsAndChildren(arg(), props, children)
+        // } else if (isFunction(arg)) {
+        //     processArgsIntoPropsAndChildren(arg(), props, children)
 
         } else if (typeof arg === 'object') {
-            processPropsArg(arg, props)
+            let propsArg = arg as Properties
+            processPropsArg(propsArg, props)
         
         } else {
-            let error = new Error('Unexpected properties argument')
-            console.error(error, arg)
-            throw error
+            let errorMessage = 'Unexpected properties argument'
+            console.error(errorMessage, args, i, arg)
+            throw new Error(errorMessage)
         }
     }
 }
 
-function processPropsArg(arg: UIArg, props: UIProperties): void {
-    for (const name in arg) {
+function processPropsArg(propsArg: PropertyValue, props: Properties): void {
+    for (const name in propsArg) {
 
         if (name === 'style') {
             // Allow for multiple style declaration arguments per UI element
-            processStyleArg(arg, props)
+            processStyleArg(propsArg, props)
             continue
         }
 
@@ -129,11 +148,12 @@ function processPropsArg(arg: UIArg, props: UIProperties): void {
             throw new Error(`Property key declared twice: ${name}`)
         }
 
-        props[name] = arg[name]
+        props[name] = propsArg[name]
     }
 }
 
-function processStyleArg(arg: UIArg, props: UIProperties): void {
+type UIStyleArg = { style: {[key: string]: any} }
+function processStyleArg(arg: UIStyleArg, props: Properties): void {
     if (props.style) {
         props.style = {...props.style, ...arg.style}
     } else {
@@ -145,7 +165,7 @@ function processStyleArg(arg: UIArg, props: UIProperties): void {
 // Flag-Enabled functionality
 /////////////////////////////
 
-function enableDebugBackgrounds(props: UIProperties) {
+function enableDebugBackgrounds(props: Properties) {
     if (props.style == null) {
         props.style = {}
     }
@@ -156,7 +176,7 @@ function enableDebugBackgrounds(props: UIProperties) {
     }
 }
 
-function enableAutoKeysForChildren(children: UIChildren) {
+function enableAutoKeysForChildren(children: ElementChild[]) {
     if (children.length <= 0) {
         return
     }
@@ -171,30 +191,4 @@ function enableAutoKeysForChildren(children: UIChildren) {
         let key = `${i}`
         children[i] = React.cloneElement(child, { key:key, 'ui-auto-key': key })
     }
-}
-
-
-// Utils
-////////
-
-function isFunction(functionToCheck: UIArg): boolean {
-    return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]';
-}
-
-var withSymbol = typeof Symbol !== 'undefined';
-function isScalar(value: UIArg): boolean {
-    var type = typeof (value)
-    if (type === 'string') return true
-    if (type === 'number') return true
-    if (type === 'boolean') return true
-    if (withSymbol === true && type === 'symbol') return true
-
-    // null & undefined are considered to be scalar too
-    if (value == null) return true
-    if (withSymbol === true && value instanceof Symbol) return true
-    if (value instanceof String) return true
-    if (value instanceof Number) return true
-    if (value instanceof Boolean) return true
-
-    return false
 }
