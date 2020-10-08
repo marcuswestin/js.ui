@@ -1,4 +1,4 @@
-import { makeElement } from '../js.ui-core'
+import { makeElement } from './js.ui-core'
 
 // Common elements with browser-defined behavior (e.g not div/span)
 ///////////////////////////////////////////////////////////////////

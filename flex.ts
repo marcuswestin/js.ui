@@ -1,8 +1,8 @@
 // JS-UI Flex Layout
 ////////////////////
 
-import { makeElement, Argument } from "../js.ui-core"
-import { Style } from "../style/js.ui-styles"
+import { makeElement, Argument } from "./js.ui-core"
+import { Style } from "./style"
 
 
 // Flex elements
