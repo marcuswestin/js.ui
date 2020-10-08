@@ -57,11 +57,7 @@ class LabelElement {
 
 type UITextArgument = string | number | undefined | null
 
-export function Label(...args: UITextArgument[]): LabelElement {
-    return new LabelElement(args.join(' '))
-}
-
-export function Text(...args: UITextArgument[]): LabelElement {
+export function Label(args: UITextArgument): LabelElement {
     return new LabelElement(args.join(' '))
 }
 
