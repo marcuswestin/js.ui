@@ -1,8 +1,22 @@
-import { makeElement } from './js.ui-core'
+import { Argument, TextViewElement, makeElement } from './js.ui-core'
+import { UIFlexStyles } from './style'
 
-// Common elements with browser-defined behavior (e.g not div/span)
-///////////////////////////////////////////////////////////////////
+export function Style() { return new UIFlexStyles() }
 
+type UITextArgument = string | number | undefined | null
+export function TextView(text: UITextArgument): TextViewElement {
+    return new TextViewElement(text ? text.toString() : '')
+}
+
+// Flex elements
+export let Row = makeFlexElementConstructor('row')
+export let Col = makeFlexElementConstructor('column')
+export let RowReverse = makeFlexElementConstructor('row-reverse')
+export let ColReverse = makeFlexElementConstructor('column-reverse')
+
+// Browser elements
+export let Div = makeElementConstructor('div')
+export let Span = makeElementConstructor('span')
 export let A = makeElementConstructor('a')
 export let Br = makeElementConstructor('br')
 export let Button = makeElementConstructor('button')
@@ -26,11 +40,24 @@ export let Textarea = makeElementConstructor('textarea')
 export let Th = makeElementConstructor('th')
 export let Tr = makeElementConstructor('tr')
 export let Ul = makeElementConstructor('ul')
-export let Div = makeElementConstructor('div')
-export let Span = makeElementConstructor('span')
+
+// Common useful elements
+export let RowSpacer = () => Row({ style: { maxHeight: 14 } })
+export let ColSpacer = () => Col({ style: { maxWidth: 14 } })
+
+
+// Util
+///////
+
+function makeFlexElementConstructor(flexDirection: string) {
+    return (...args: Argument[]) => {
+        let flexStyles = { display: 'flex', flexDirection: flexDirection, flexGrow:1, flexShrink:1 }
+        return makeElement(`ui-${flexDirection}`, { style:flexStyles }, ...args)
+    }
+}
 
 function makeElementConstructor(tagName: string) {
-    return (...args: any) => {
+    return (...args: Argument[]) => {
 	    return makeElement(tagName, ...args)
     }
 }

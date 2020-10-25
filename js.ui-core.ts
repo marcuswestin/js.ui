@@ -18,6 +18,7 @@
 //
 
 import React, { ReactElement } from 'react'
+import { UIStyles } from './style'
 
 export let flags = {
     ENABLE_DEBUG_BACKGROUNDS: true,
@@ -38,7 +39,7 @@ class ElementKey {
 }
 
 export type Argument = Element | Properties | ElementKey | null
-type Element = ReactElement | LabelElement
+type Element = ReactElement | TextViewElement
 type ElementChild = ReactElement | string
 type PropertyValue = any
 type Properties = {[ key: string ]: PropertyValue }
@@ -50,16 +51,11 @@ interface Stringable {
     toString(): string
 }
 
-class LabelElement {
+export class TextViewElement {
     readonly value: string
     constructor(value: Stringable) { this.value = value.toString() }
 }
 
-type UITextArgument = string | number | undefined | null
-
-export function Label(text: UITextArgument): LabelElement {
-    return new LabelElement(text ? text.toString() : '')
-}
 
 // UI Element consctruction
 ///////////////////////////
@@ -107,7 +103,7 @@ function processArgsIntoPropsAndChildren(args: Argument[], props: Properties, ch
         if (React.isValidElement(arg)) {
             children.push(arg)
 
-        } else if (arg instanceof LabelElement) {
+        } else if (arg instanceof TextViewElement) {
             children.push(arg.value)
 
         } else if (arg instanceof ElementKey) {
@@ -116,8 +112,8 @@ function processArgsIntoPropsAndChildren(args: Argument[], props: Properties, ch
         } else if (Array.isArray(arg)) {
             processArgsIntoPropsAndChildren(arg as Argument[], props, children)
 
-        } else if (arg?.__getStyles) {
-            processStyleArg(arg?.__getStyles(), props)
+        } else if (arg instanceof UIStyles) {
+            processStyleArg(arg.getStyles(), props)
 
         // } else if (isFunction(arg)) {
         //     processArgsIntoPropsAndChildren(arg(), props, children)
