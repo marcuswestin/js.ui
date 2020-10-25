@@ -37,7 +37,7 @@ class ElementKey {
     constructor(key: string) { this.key = key }
 }
 
-export type Argument = Element | Properties | ElementKey
+export type Argument = Element | Properties | ElementKey | null
 type Element = ReactElement | LabelElement
 type ElementChild = ReactElement | string
 type PropertyValue = any
@@ -116,6 +116,9 @@ function processArgsIntoPropsAndChildren(args: Argument[], props: Properties, ch
         } else if (Array.isArray(arg)) {
             processArgsIntoPropsAndChildren(arg as Argument[], props, children)
 
+        } else if (arg?.__getStyles) {
+            processStyleArg(arg?.__getStyles(), props)
+
         // } else if (isFunction(arg)) {
         //     processArgsIntoPropsAndChildren(arg(), props, children)
 
@@ -136,7 +139,7 @@ function processPropsArg(propsArg: PropertyValue, props: Properties): void {
 
         if (name === 'style') {
             // Allow for multiple style declaration arguments per UI element
-            processStyleArg(propsArg, props)
+            processStyleArg(propsArg.style, props)
             continue
         }
 
@@ -148,12 +151,12 @@ function processPropsArg(propsArg: PropertyValue, props: Properties): void {
     }
 }
 
-type UIStyleArg = { style: {[key: string]: any} }
-function processStyleArg(arg: UIStyleArg, props: Properties): void {
+function processStyleArg(styleArg: any, props: Properties): void {
+    if (!styleArg) { return }
     if (props.style) {
-        props.style = {...props.style, ...arg.style}
+        props.style = {...props.style, ...styleArg}
     } else {
-        props.style = arg.style
+        props.style = styleArg
     }
 }
 
@@ -167,7 +170,7 @@ function enableDebugBackgrounds(props: Properties) {
     }
     if (props.style.background == null) {
         let randRBG = () => Math.random() * 255
-        let colors = [randRBG(), randRBG(), randRBG(), 0.2]
+        let colors = [randRBG(), randRBG(), randRBG(), 0.75]
         props.style.background = `rgba(${colors.join(',')})`
     }
 }

@@ -26,8 +26,8 @@ export let Textarea = makeElementConstructor('textarea')
 export let Th = makeElementConstructor('th')
 export let Tr = makeElementConstructor('tr')
 export let Ul = makeElementConstructor('ul')
-// export let Div = makeElementConstructor('div')
-// export let Span = makeElementConstructor('span')
+export let Div = makeElementConstructor('div')
+export let Span = makeElementConstructor('span')
 
 function makeElementConstructor(tagName: string) {
     return (...args: any) => {
