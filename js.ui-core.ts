@@ -18,7 +18,6 @@
 //
 
 import React, { ReactElement } from 'react'
-import { UIStyles } from './style'
 
 export let flags = {
     ENABLE_DEBUG_BACKGROUNDS: true,
@@ -44,13 +43,10 @@ type ElementChild = ReactElement | string
 type PropertyValue = any
 type Properties = {[ key: string ]: PropertyValue }
 
-// --- Internal ----------------------------------------------------
-////////////////////////////////////////////////////////////////////
+// TextView
+///////////
 
-interface Stringable {
-    toString(): string
-}
-
+interface Stringable { toString(): string }
 export class TextViewElement {
     readonly value: string
     constructor(value: Stringable) { this.value = value.toString() }
@@ -99,6 +95,7 @@ function makeElement_(tagName: string, ...args: Argument[]): Element {
 function processArgsIntoPropsAndChildren(args: Argument[], props: Properties, children: ElementChild[]) {
     for (let i=0; i<args.length; i++) {
         let arg = args[i]
+        if (!arg) { continue }
 
         if (React.isValidElement(arg)) {
             children.push(arg)
@@ -112,8 +109,9 @@ function processArgsIntoPropsAndChildren(args: Argument[], props: Properties, ch
         } else if (Array.isArray(arg)) {
             processArgsIntoPropsAndChildren(arg as Argument[], props, children)
 
-        } else if (arg instanceof UIStyles) {
-            processStyleArg(arg.getStyles(), props)
+        } else if (arg.__uiStyles) {
+            delete arg.__uiStyles
+            processStyleArg(arg, props)
 
         // } else if (isFunction(arg)) {
         //     processArgsIntoPropsAndChildren(arg(), props, children)

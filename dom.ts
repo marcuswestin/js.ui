@@ -1,10 +1,10 @@
 import { Argument, TextViewElement, makeElement } from './js.ui-core'
-import { UIFlexStyles } from './style'
+import { ProcessStyles, Styles } from './style'
 
-export function Style() { return new UIFlexStyles() }
+export function Style(styles: Styles) { return ProcessStyles(styles) }
 
-type UITextArgument = string | number | undefined | null
-export function TextView(text: UITextArgument): TextViewElement {
+type TextViewArgument = string | number | undefined | null
+export function TextView(text: TextViewArgument): TextViewElement {
     return new TextViewElement(text ? text.toString() : '')
 }
 
