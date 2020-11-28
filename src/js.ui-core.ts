@@ -1,6 +1,7 @@
 import React from "react";
 import { TextStyles, ViewProperties, ViewStyles } from "./js.ui-types";
 import { ReactElement } from "./types/react-types";
+import flags from './flags'
 
 type View = ReactElement
 export type ChildView = View | TextViewElement
@@ -50,10 +51,9 @@ export function makeElement(...args: ViewArg[]): View {
     //     enableDebugBackgrounds(props)
     // }
 
-//TODO
-    // if (flags.ENABLE_AUTO_KEYS) {
-    //     enableAutoKeysForChildren(children)
-    // }
+    if (flags.ENABLE_AUTO_CHILD_KEYS) {
+        enableAutoKeysForChildren(children)
+    }
     
     // children = (children.length === 0
     //     ? null // React complains if "void" tags (eg input) have non-null children (even an empty array)
@@ -62,6 +62,21 @@ export function makeElement(...args: ViewArg[]): View {
 
     return viewMakers.makeView(props, children)
 }
+
+function enableAutoKeysForChildren(children: ChildView[]) {
+    for (var i=0; i<children.length; i++) {
+        if (!React.isValidElement(children[i])) {
+            continue
+        }
+        let child = children[i] as ReactElement
+        if (child.key) {
+            continue
+        }
+        let key = `${i}`
+        children[i] = React.cloneElement(child, { key:key })
+    }
+}
+
 
 
 
