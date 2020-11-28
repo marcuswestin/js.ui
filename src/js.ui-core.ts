@@ -212,7 +212,8 @@ type ViewMakers = { makeView: ViewMaker, makeTextView: TextViewMaker }
 function createViewMakers(): ViewMakers {
     let types: { view:any, text:any }
     try {
-        let ReactNative = require('react-native')
+        let native = 'native'
+        let ReactNative = require(`react-${native}`)
         types = {
             view: ReactNative.View,
             text: ReactNative.Text,
