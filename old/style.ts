@@ -20,10 +20,11 @@ type bottom = number
 type left = number
 
 type TopRightBottomLeft = string | all | [all] | [topAndBottom, rightAndLeft] | [top, rightAndLeft, bottom] | [top, right, bottom, left]
-type FontWeight = number | string
+type FontWeight = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 'lighter' | 'normal' | 'bold' | 'bolder' // https://www.w3schools.com/cssref/pr_font_weight.asp
 
 export interface Styles {
     margin?:            TopRightBottomLeft,
+    marginLeft?:        Dimension,
     padding?:           TopRightBottomLeft,
     width?:             Dimension,
     height?:            Dimension,
@@ -38,10 +39,22 @@ export interface Styles {
     borderRadius?:      Dimensions_1to4,
     background?:        Color,
     color?:             Color,
+    opacity?:           number,
     flexGrow?:          Ratio,
     flexShrink?:        Ratio,
     flexBasis?:         Dimension,
     fontWeight?:        FontWeight,
+    fontFamily?:        string,
+    lineHeight?:        number,
+    letterSpacing?:     number,
+    
+    textTransform?:     'uppercase' | 'lowercase' | 'capitalize',
+    textDecoration?:    'underline' | 'overline' | 'line-through' | string
+    whiteSpace?:        'nowrap' | 'normal' | 'pre',
+    fontStyle?:         'normal' | 'italic' | 'oblique' ,
+    textOverflow?:      'clip' | 'ellipsis' | 'fade' | string,
+    resize?:            'none' | 'both' | 'horizontal' | 'vertical' | 'initial' | 'inherit',
+    position?:          'static' | 'relative' | 'fixed' | 'absolute' | 'sticky',
     overflow?:          'scroll' | 'hidden' | 'visible' | 'auto',
     overflowY?:         'scroll' | 'hidden' | 'visible' | 'auto',
     overflowX?:         'scroll' | 'hidden' | 'visible' | 'auto',
@@ -58,7 +71,7 @@ let transform_Dimensions_1to4 = (arg: Dimensions_1to4) =>
         ? arg.map(transform_Dimension).join(' ')
         : transform_Dimension(arg)
 
-let transform_Dimension3Color1 = (d1: Dimension, d2: Dimension, d3: Dimension, color: Color) => {
+let transform_Dimension3Color1 = ([d1, d2, d3, color]: Dimension3Color1) => {
     let Dimensions = [d1, d2, d3].map(transform_Dimension).join(' ')
     return `${Dimensions} ${color}`
 }
@@ -66,7 +79,7 @@ let transform_Dimension3Color1 = (d1: Dimension, d2: Dimension, d3: Dimension, c
 let transform_Color = (color: Color): string => {
     if (typeof color == 'number') {
         if (color <= 1.0) { // black opacity
-            return `rgba(0,0,0,{$color}`
+            return `rgba(0,0,0,${color})`
         } else {
             throw new Error(`Got invalid color value: ${color}`)
         }
@@ -85,6 +98,7 @@ let transform_Dimension = (arg: Dimension) => typeof arg === 'number' ? arg+'px'
 
 const transformers: any = {
     margin:            transform_TopRightBottomLeft,
+    marginLeft:        transform_Dimension,
     padding:           transform_TopRightBottomLeft,
     width:             transform_Dimension,
     height:            transform_Dimension,
@@ -99,10 +113,22 @@ const transformers: any = {
     borderRadius:      transform_Dimensions_1to4,
     background:        transform_Color,
     color:             transform_Color,
+    opacity:           identity,
     flexGrow:          transform_Ratio,
     flexShrink:        transform_Ratio,
     flexBasis:         transform_Dimension,
     fontWeight:        transform_FontWeight,
+    fontFamily:        identity,
+    lineHeight:        transform_Dimension,
+    letterSpacing:     transform_Dimension,
+    
+    textTransform:     identity,
+    textDecoration:    identity,
+    whiteSpace:        identity,
+    fontStyle:         identity,
+    textOverflow:      identity,
+    resize:            identity,
+    position:          identity,
     overflow:          identity,
     overflowY:         identity,
     overflowX:         identity,

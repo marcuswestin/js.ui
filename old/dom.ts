@@ -3,10 +3,23 @@ import { ProcessStyles, Styles } from './style'
 
 export function Style(styles: Styles) { return ProcessStyles(styles) }
 
+Style.flexFix = function(d: number) {
+    return Style({ flexBasis:d, flexShrink:0, flexGrow:0, })
+}
+Style.ellipsis = function(value: 'clip' | 'ellipsis' | 'fade' | string | undefined = 'ellipsis') {
+    return Style({ textOverflow:value, whiteSpace:'nowrap', overflow:'hidden' })
+}
+
 type TextViewArgument = string | number | undefined | null
 export function TextView(text: TextViewArgument): TextViewElement {
     return new TextViewElement(text ? text.toString() : '')
 }
+
+export let Circle = (diameter: number, ...args: Argument[]) => {
+    return Div(Style({ width: diameter, height: diameter, borderRadius:diameter }), ...args)
+}
+
+
 
 // Flex elements
 export let Row = makeFlexElementConstructor('row')
@@ -42,8 +55,8 @@ export let Tr = makeElementConstructor('tr')
 export let Ul = makeElementConstructor('ul')
 
 // Common useful elements
-export let RowSpacer = () => Row({ style: { maxHeight: 14 } })
-export let ColSpacer = () => Col({ style: { maxWidth: 14 } })
+export let RowSpacer = () => Row({ style: { maxHeight: 14, flexBasis: 14 } })
+export let ColSpacer = () => Col({ style: { maxWidth: 14, flexBasis: 14 } })
 
 
 // Util

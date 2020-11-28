@@ -18,9 +18,10 @@
 //
 
 import React, { ReactElement } from 'react'
+import { HTMLProperties } from './types/HTMLProperties'
 
 export let flags = {
-    ENABLE_DEBUG_BACKGROUNDS: true,
+    ENABLE_DEBUG_BACKGROUNDS: false,
     ENABLE_AUTO_KEYS: true,
 }
 
@@ -37,11 +38,21 @@ class ElementKey {
     constructor(key: string) { this.key = key }
 }
 
-export type Argument = Element | Properties | ElementKey | null
+export type Argument = Element | Properties | ElementKey | false | null | Argument[]
 type Element = ReactElement | TextViewElement
 type ElementChild = ReactElement | string
-type PropertyValue = any
-type Properties = {[ key: string ]: PropertyValue }
+
+// type Properties = {[ key: string ]: PropertyValue }
+type Properties = JSUIProperties
+
+interface JSUIProperties extends HTMLProperties {
+    id?: string,
+    key?: string,
+    'ui-key'?: string,
+    '__uiStyles'?: any,
+    style?: any,
+}
+
 
 // TextView
 ///////////
@@ -110,7 +121,6 @@ function processArgsIntoPropsAndChildren(args: Argument[], props: Properties, ch
             processArgsIntoPropsAndChildren(arg as Argument[], props, children)
 
         } else if (arg.__uiStyles) {
-            delete arg.__uiStyles
             processStyleArg(arg, props)
 
         // } else if (isFunction(arg)) {
@@ -128,7 +138,7 @@ function processArgsIntoPropsAndChildren(args: Argument[], props: Properties, ch
     }
 }
 
-function processPropsArg(propsArg: PropertyValue, props: Properties): void {
+function processPropsArg(propsArg: Properties, props: Properties): void {
     for (const name in propsArg) {
 
         if (name === 'style') {
@@ -137,10 +147,12 @@ function processPropsArg(propsArg: PropertyValue, props: Properties): void {
             continue
         }
 
+        // @ts-ignore
         if (props[name] !== undefined) {
             throw new Error(`Property key declared twice: ${name}`)
         }
 
+        // @ts-ignore
         props[name] = propsArg[name]
     }
 }

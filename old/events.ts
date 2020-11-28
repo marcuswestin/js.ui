@@ -1,20 +1,28 @@
 // JS-UI Event Handlers
 ///////////////////////
 
-type EventHandler =
+export type EventHandler =
     ((event: Event) => void)
     | ((event: Event) => Promise<void>)
     | undefined
 
+type KeyboardEventHandler =
+    ((event: KeyboardEvent) => void)
+    | ((event: KeyboardEvent) => Promise<void>)
+    | undefined
+
 interface Handlers {
     onClick?: EventHandler,
-    onKeyPress?: EventHandler,
+    onKeyPress?: KeyboardEventHandler,
     onChange?: EventHandler,
     onPress?: EventHandler,
+
+    onKeyUp?: KeyboardEventHandler,
+    onKeyDown?: KeyboardEventHandler,
     
     // Custom handlers
     onTap?: EventHandler,
-    onKeyPressEnter?: EventHandler,
+    onKeyPressEnter?: KeyboardEventHandler,
 }
 
 export function Handle(handlers: Handlers) {
@@ -28,6 +36,8 @@ export function Handle(handlers: Handlers) {
     let res: any = {
         onClick:    handlers.onClick,
         onKeyPress: handlers.onKeyPress,
+        onKeyDown:  handlers.onKeyDown,
+        onKeyUp:    handlers.onKeyUp,
         onChange:   handlers.onChange,
     }
 
@@ -38,7 +48,7 @@ export function Handle(handlers: Handlers) {
 
     if (handlers.onKeyPressEnter) {
         res.onKeyPress = function(event: KeyboardEvent) {
-            if (event.key !== 'enter') { return }
+            if (event.key !== 'Enter') { return }
             handlers.onKeyPressEnter!(event)
         }
     }
