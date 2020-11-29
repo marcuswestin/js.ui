@@ -34,14 +34,14 @@ export function Handle(handlers: Handlers) {
         throw new Error('Cannot use onKeyPress and onKeyPressEnter together. TODO: Support this (ask Marcus).')
     }
 
-    let res: any = {
-        onClick:    handlers.onClick,
-        onKeyPress: handlers.onKeyPress,
-        onKeyDown:  handlers.onKeyDown,
-        onKeyUp:    handlers.onKeyUp,
-        onChange:   handlers.onChange,
-        onSubmit:   handlers.onSubmit,
-    }
+    let res: any = {}
+    if (handlers.onClick) { res.onClick = handlers.onClick }
+    if (handlers.onKeyPress) { res.onKeyPress = handlers.onKeyPress }
+    if (handlers.onKeyDown) { res.onKeyDown = handlers.onKeyDown }
+    if (handlers.onKeyUp) { res.onKeyUp = handlers.onKeyUp }
+    if (handlers.onChange) { res.onChange = handlers.onChange }
+    if (handlers.onSubmit) { res.onSubmit = handlers.onSubmit }
+
 
     if (handlers.onTap) {
         res.style = { cursor:'pointer' }
