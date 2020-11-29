@@ -39,7 +39,7 @@ class ElementKey {
 }
 
 export type Argument = Element | Properties | ElementKey | false | null | Argument[]
-type Element = ReactElement | TextViewElement
+export type Element = ReactElement | TextViewElement
 type ElementChild = ReactElement | string
 
 // type Properties = {[ key: string ]: PropertyValue }
