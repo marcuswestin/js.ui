@@ -16,6 +16,7 @@ interface Handlers {
     onKeyPress?: KeyboardEventHandler,
     onChange?: EventHandler,
     onPress?: EventHandler,
+    onSubmit?: EventHandler,
 
     onKeyUp?: KeyboardEventHandler,
     onKeyDown?: KeyboardEventHandler,
@@ -39,6 +40,7 @@ export function Handle(handlers: Handlers) {
         onKeyDown:  handlers.onKeyDown,
         onKeyUp:    handlers.onKeyUp,
         onChange:   handlers.onChange,
+        onSubmit:   handlers.onSubmit,
     }
 
     if (handlers.onTap) {
