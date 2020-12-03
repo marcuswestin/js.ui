@@ -1,6 +1,6 @@
-import React from "react";
-import { TextStyles, ViewProperties, ViewStyles } from "./js.ui-types";
-import { ReactElement } from "./types/react-types";
+import React from "react"
+import { TextStyles, ViewProperties, ViewStyles } from "./js.ui-types"
+import { ReactElement } from "./types/react-types"
 import flags from './flags'
 
 type View = ReactElement

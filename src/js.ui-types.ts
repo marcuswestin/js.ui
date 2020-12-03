@@ -75,7 +75,7 @@ type SharedTextStyles = Omit<AllTextStyles, keyof NativeOnlyTextStyles | keyof D
 // export type NativeTextProps = ReactNativeTextProps
 // export type TextProperties = {
 //     // We use NativeTextStyle values, since they are more restrictive than DOM ones
-//     [P in keyof SharedTextProps]?: SharedTextProps[P];
+//     [P in keyof SharedTextProps]?: SharedTextProps[P]
 // }
 
 // type AllTextProps = DOMTextProps | NativeTextProps
@@ -121,7 +121,7 @@ type SharedTextStyles = Omit<AllTextStyles, keyof NativeOnlyTextStyles | keyof D
 
 //     [P in keyof SharedTextStyleKeys]?: BaseTextStyles[P]
 // }
-// let _sharedTextStyles: SharedTextStyles = {}; 
+// let _sharedTextStyles: SharedTextStyles = {} 
 // // _sharedTextStyles. // <- uncomment in vscode for seeing the shared keys
 
 
