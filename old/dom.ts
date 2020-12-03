@@ -1,7 +1,10 @@
 import { Argument, TextViewElement, makeElement } from './js.ui-core'
 import { ProcessStyles, Styles } from './style'
 
-export function Style(styles: Styles) { return ProcessStyles(styles) }
+export function Style(...styles: Styles[]) {
+    return styles.map(ProcessStyles)
+}
+
 
 Style.flexFix = function(d: number) {
     return Style({ flexBasis:d, flexShrink:0, flexGrow:0, })
