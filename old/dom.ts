@@ -6,6 +6,10 @@ export function Style(...styles: Styles[]) {
 }
 
 
+export function StyleLiteral(...styles: Styles[]) {
+    return styles.map(ProcessStyles)
+}
+
 Style.flexFix = function(d: number) {
     return Style({ flexBasis:d, flexShrink:0, flexGrow:0, })
 }
