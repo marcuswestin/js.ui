@@ -50,7 +50,7 @@ export interface Styles {
     
     textTransform?:     'uppercase' | 'lowercase' | 'capitalize',
     textDecoration?:    'underline' | 'overline' | 'line-through' | string
-    whiteSpace?:        'nowrap' | 'normal' | 'pre',
+    whiteSpace?:        'nowrap' | 'normal' | 'pre' | 'pre-wrap',
     fontStyle?:         'normal' | 'italic' | 'oblique' ,
     textOverflow?:      'clip' | 'ellipsis' | 'fade' | string,
     resize?:            'none' | 'both' | 'horizontal' | 'vertical' | 'initial' | 'inherit',
