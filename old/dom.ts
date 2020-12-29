@@ -17,6 +17,15 @@ Style.ellipsis = function(value: 'clip' | 'ellipsis' | 'fade' | string | undefin
     return Style({ textOverflow:value, whiteSpace:'nowrap', overflow:'hidden' })
 }
 
+Style.flexScrollable = {
+    y: Style({
+        overflowY: 'scroll',
+        height: 0,
+    })
+}
+
+
+
 type TextViewArgument = string | number | undefined | null
 export function TextView(text: TextViewArgument): TextViewElement {
     return new TextViewElement(text ? text.toString() : '')
