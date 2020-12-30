@@ -25,6 +25,7 @@ type FontWeight = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 'lighter
 export interface Styles {
     margin?:            TopRightBottomLeft,
     marginLeft?:        Dimension,
+    marginRight?:       Dimension,
     padding?:           TopRightBottomLeft,
     width?:             Dimension,
     height?:            Dimension,
@@ -99,6 +100,7 @@ let transform_Dimension = (arg: Dimension) => typeof arg === 'number' ? arg+'px'
 const transformers: any = {
     margin:            transform_TopRightBottomLeft,
     marginLeft:        transform_Dimension,
+    marginRight:       transform_Dimension,
     padding:           transform_TopRightBottomLeft,
     width:             transform_Dimension,
     height:            transform_Dimension,
