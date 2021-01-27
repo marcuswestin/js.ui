@@ -5,7 +5,7 @@ import flags from './flags'
 
 type View = ReactElement
 export type ChildView = View | TextViewElement
-type ViewArg = ViewStyleArg | ChildView | ChildView[] | null | undefined // | ViewProperties
+type ViewArg = ViewStyleArg | ViewProperties | ChildView | ChildView[] | null | undefined
 export function Row(...args: ViewArg[]): View {
     let styles = Style({ display: 'flex', flexDirection: 'row' })
     return makeElement(styles, ...args)

@@ -35,21 +35,21 @@ type SharedViewStyles = Omit<AllViewStyles, keyof NativeOnlyViewStyles | keyof D
 // /// VIEW PROPERTIES
 // ///////////////////
 
-// export type DOMViewProperties = ReactCSSProperties
-// export type NativeViewProperties = ReactNativeViewProps
-// export type ViewProperties = {
-//     // We use NativeViewStyle values, since they are more restrictive than DOM ones
-//     [P in keyof SharedViewProperties]?: NativeViewProperties[P]
-// }
+export type DOMViewProperties = ReactCSSProperties
+export type NativeViewProperties = ReactNativeViewProps
+export type ViewProperties = {
+    // We use NativeViewStyle values, since they are more restrictive than DOM ones
+    [P in keyof SharedViewProperties]?: NativeViewProperties[P]
+}
 
-// type AllViewProperties = DOMViewProperties | NativeViewProperties
-// type NativeOnlyViewProperties = Omit<NativeViewProperties, keyof DOMViewProperties>
-// type DOMOnlyViewProperties = Omit<DOMViewProperties, keyof NativeViewProperties>
-// type SharedViewProperties = Omit<AllViewProperties, keyof NativeOnlyViewProperties | keyof DOMOnlyViewProperties>
+type AllViewProperties = DOMViewProperties | NativeViewProperties
+type NativeOnlyViewProperties = Omit<NativeViewProperties, keyof DOMViewProperties>
+type DOMOnlyViewProperties = Omit<DOMViewProperties, keyof NativeViewProperties>
+type SharedViewProperties = Omit<AllViewProperties, keyof NativeOnlyViewProperties | keyof DOMOnlyViewProperties>
 // // ((): ViewProperties => {return {}})(). // <- uncomment in vscode for seeing keys
 
 //TODO
-export type ViewProperties = any
+// export type ViewProperties = any
 
 
 
