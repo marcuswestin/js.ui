@@ -1,69 +1,71 @@
 import React from "react"
-import { TextStyles, ViewProperties, ViewStyles } from "./js.ui-types"
-import { ReactElement } from "./types/react-types"
-import flags from './flags'
+import { View, ViewArg, UniversalViewProperties, ReactElement } from "./js.ui-types"
 
-type View = ReactElement
-export type ChildView = View | TextViewElement
-type ViewArg = ViewStyleArg | ViewProperties | ChildView | ChildView[] | null | undefined
-export function Row(...args: ViewArg[]): View {
-    let styles = Style({ display: 'flex', flexDirection: 'row' })
-    return makeElement(styles, ...args)
-}
-export function Col(...args: ViewArg[]): View {
-    let styles = Style({ display: 'flex', flexDirection: 'column' })
-    return makeElement(styles, ...args)
+let flags = {
+    ENABLE_AUTO_CHILD_KEYS: true
 }
 
-type ViewStyleArg = { style:ViewStyles, __JSUIViewStyles:true }
-export function Style(styles: ViewStyles): ViewStyleArg {
-    return { style:styles, __JSUIViewStyles:true }
+export let viewMakers: ViewMakers
+
+export type TextViewMaker = (properties: any, text: string) => View
+export type ViewMaker = (properties: any, children: View[]) => View
+export type ViewEngine = 'Native' | 'DOM'
+type ViewMakers = {
+    engine: ViewEngine,
+    makeView: ViewMaker,
+    makeTextView: TextViewMaker,
+    // TODO: makeImageView
 }
 
-type TextStyleArg = { style:TextStyles, __JSUITextStyles:true }
-export function TextStyle(styles: TextStyles): TextStyleArg {
-    return { style:styles, __JSUITextStyles:true }
+export function setViewMakers(theViewMakers: ViewMakers) {
+    if (viewMakers) {
+        throw new Error('setViewMakers called twice')
+    }
+    viewMakers = theViewMakers
 }
 
-let viewMakers: ViewMakers = createViewMakers()
+// makeView is for internal use only.
+// It takes a list of view arguments, and processes them into a view with the
+// given properties. Each view argument can be a properties object, a child view, a
+// list of additional view arguments to unwrap (which allows for e.g a view property
+// function to add multiple children, properties, etc), or null/undefined. It will
+// also apply optional properties, such as automatically settings keys for all child
+// views.
+export function makeView(...viewArgs: any[]): View {
+    let viewProperties: UniversalViewProperties = {}
+    let viewChildren: View[] | null = []
 
-export function makeElement(...args: ViewArg[]): View {
-
-    let props: ViewProperties = {}
-    let children: ChildView[] | null = []
-
-    processArgsIntoPropsAndChildren(args, props, children)
+    processArgsIntoPropsAndChildren(viewProperties, viewChildren, viewArgs)
 
 //TODO
-    // if (props.key) {
+    // if (viewProperties.key) {
     //     // make explicitly set keys visible in the DOM tree
-    //     props['ui-key'] = props.key
+    //     viewProperties['ui-key'] = viewProperties.key
     // }
 
 //TODO
     // if (!type) {
     //     // without the dash, React complains about the name casing
-    //     type = props.key+'-'
+    //     type = viewProperties.key+'-'
     // }
 
 //TODO
     // if (flags.ENABLE_DEBUG_BACKGROUNDS) {
-    //     enableDebugBackgrounds(props)
+    //     enableDebugBackgrounds(viewProperties)
     // }
 
     if (flags.ENABLE_AUTO_CHILD_KEYS) {
-        enableAutoKeysForChildren(children)
+        enableAutoKeysForChildren(viewChildren)
     }
     
-    // children = (children.length === 0
-    //     ? null // React complains if "void" tags (eg input) have non-null children (even an empty array)
-    //     : children)
+    // viewChildren = (viewChildren.length === 0
+    //     ? null // React complains if "void" tags (eg input) have non-null viewChildren (even an empty array)
+    //     : viewChildren)
 
-
-    return viewMakers.makeView(props, children)
+    return viewMakers.makeView(viewProperties, viewChildren)
 }
 
-function enableAutoKeysForChildren(children: ChildView[]) {
+function enableAutoKeysForChildren(children: View[]) {
     for (var i=0; i<children.length; i++) {
         if (!React.isValidElement(children[i])) {
             continue
@@ -77,166 +79,51 @@ function enableAutoKeysForChildren(children: ChildView[]) {
     }
 }
 
-
-
-
-/// TEXT VIEWS
-//////////////
-
-function isTextStyleArg(arg: TextViewArg): arg is TextStyleArg {
-    return '__JSUITextStyles' in (arg as any)
-}
-function isViewStyleArg(arg: ViewArg): arg is ViewStyleArg {
-    return '__JSUIViewStyles' in (arg as any)
-}
-function isTextViewElement(arg: ViewArg): arg is TextViewElement {
-    return arg instanceof TextViewElement
-}
-
-
-// interface Stringable { toString(): string }
-type ScalarTextValue = string | number | undefined
-type TextViewArg = ScalarTextValue | TextStyleArg // | TextProperties
-export function TextView(...args: TextViewArg[]): ChildView {
-    let values: string[] = []
-//TODO
-    // let properties: TextProperties | undefined = undefined
-    let styles: TextStyles = {}
-    for (let arg of args) {
-        if (!arg) {
+// processArgsIntoPropsAndChildren takes a takes a list of view arguments to process,
+// and populates the given set of view properties and children.
+// React elements are treated as child views.
+// Objects are treated as view properties.
+// And Arrays are unwrapped and recursively processed.
+function processArgsIntoPropsAndChildren(viewProperties: UniversalViewProperties, viewChildren: View[], viewArgsToProcess: ViewArg[]) {
+    for (let viewArg of viewArgsToProcess) {
+        if (!viewArg) {
             continue
-        }
-        if (typeof arg === 'string') {
-            values.push(arg)
 
-        } else if (typeof arg === 'number') {
-            values.push(arg.toString())
+        } else if (React.isValidElement(viewArg)) {
+            viewChildren.push(viewArg)
 
-        } else if (isTextStyleArg(arg)) {
-            styles = Object.assign(styles, arg.style)
+        } else if (Array.isArray(viewArg)) {
+            processArgsIntoPropsAndChildren(viewProperties, viewChildren, viewArg)
 
-        // } else {
-        //     properties = Object.assign(properties || {}, arg)
-        
-        } else {
-            throw new Error()
-        }
-    }
-    return new TextViewElement(values.join(' '), styles)
-}
-
-
-export class TextViewElement {
-    constructor(
-        readonly value: string,
-//TODO    
-        // readonly properties?: TextProperties,
-        readonly styles?: TextStyles,
-    ) {}
-}
-
-
-
-
-// Process arguments
-////////////////////
-
-function processArgsIntoPropsAndChildren(args: ViewArg[], props: ViewProperties, children: ChildView[]) {
-    for (let i=0; i<args.length; i++) {
-        let arg = args[i]
-        if (!arg) { continue }
-
-        if (React.isValidElement(arg)) {
-            children.push(arg)
-
-        } else if (isTextViewElement(arg)) {
-            children.push(viewMakers.makeTextView(arg))
-
-//TODO
-        // } else if (arg instanceof ElementKey) {
-        //     props['key'] = arg.key
-
-        } else if (Array.isArray(arg)) {
-            processArgsIntoPropsAndChildren(arg, props, children)
-
-        } else if (isViewStyleArg(arg)) {
-            processStyleArg(arg, props)
-
-        } else if (typeof arg === 'object') {
-            let propsArg = arg as ViewProperties
-            processViewPropsArg(propsArg, props)
+        } else if (typeof viewArg === 'object') {
+            let propsArg = viewArg as UniversalViewProperties
+            mergeInViewProperties(viewProperties, propsArg)
         
         } else {
             let errorMessage = 'Unexpected properties argument'
-            console.error(errorMessage, args, i, arg)
+            console.error(errorMessage, viewArg, viewArgsToProcess)
             throw new Error(errorMessage)
         }
     }
 }
 
-function processViewPropsArg(propsArg: ViewProperties, props: ViewProperties): void {
+// mergeInViewProperties takes the view properties processed so far, and the propsArg
+// to merge in. It allows for *multiple* style properties, and will merge them together
+// into one. All other properties must be declared no more than once.
+function mergeInViewProperties(viewProperties: UniversalViewProperties, propsArg: UniversalViewProperties): void {
     for (const name in propsArg) {
 
         if (name === 'style') {
-            // Allow for multiple style declaration arguments per UI element
-            processStyleArg(propsArg.style, props)
-            continue
-        }
-
-        // @ts-ignore
-        if (props[name] !== undefined) {
+            // Allow for multiple style declaration arguments per UI view element
+            // by merging together all its style declarations into one
+            viewProperties.style = {...viewProperties.style, ...propsArg.style}
+        
+        } else if (viewProperties[name] !== undefined) {
+            // Non-style properties must not be declared more than once
             throw new Error(`Property key declared twice: ${name}`)
-        }
-
-        // @ts-ignore
-        props[name] = propsArg[name]
-    }
-}
-
-function processStyleArg(styleArg: ViewStyleArg, props: ViewProperties): void {
-    if (!styleArg) { return }
-    if (props.style) {
-        props.style = {...props.style, ...styleArg.style}
-    } else {
-        props.style = styleArg.style
-    }
-}
-
-
-/// VIEW MAKERS
-///////////////
-
-type TextViewMaker = (textViewElement: TextViewElement) => View
-type ViewMaker = (styles: ViewStyles, children: ChildView[]) => View
-type ViewMakers = { makeView: ViewMaker, makeTextView: TextViewMaker }
-function createViewMakers(): ViewMakers {
-    let types: { view:any, text:any }
-    try {
-        let native = 'native'
-        let ReactNative = require(`react-${native}`)
-        types = {
-            view: ReactNative.View,
-            text: ReactNative.Text,
-        }   
-    } catch (ex) {
-        try {
-            require('react-dom')
-            types = {
-                view: 'div',
-                text: 'span',
-            }    
-        } catch (ex) {
-            throw new Error("Unable to require either react-native or react-dom")
+        
+        } else {
+            viewProperties[name] = propsArg[name]
         }
     }
-    
-    return {
-        makeView: (properties: ViewProperties, children: ChildView[]) => {
-            return React.createElement(types.view, properties, children)
-        },
-        makeTextView: (textViewElement: TextViewElement) => {
-            let props = { style:textViewElement.styles }
-            return React.createElement(types.text, props as any, textViewElement.value)            
-        }
-    }    
 }

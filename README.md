@@ -5,7 +5,7 @@ It is designed to address a set of specific shortcomings of JSX.
 Notably, JSX falls short on two fronts:
   - The parameters API
       - Klunky and difficult to specify types
-      - inabikity to pass on props wholesapce
+      - inability to pass on props wholesapce
       - does not fit neatly with typescript's types
   - Conditional rendering
       - it inevitably ends up leading to errors
