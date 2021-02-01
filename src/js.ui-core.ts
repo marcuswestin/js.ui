@@ -111,6 +111,8 @@ function processArgsIntoPropsAndChildren(viewProperties: UniversalViewProperties
 // to merge in. It allows for *multiple* style properties, and will merge them together
 // into one. All other properties must be declared no more than once.
 function mergeInViewProperties(viewProperties: UniversalViewProperties, propsArg: UniversalViewProperties): void {
+    const viewPropertiesAsAny = viewProperties as any
+    const propsArgAsAny = propsArg as any
     for (const name in propsArg) {
 
         if (name === 'style') {
@@ -118,12 +120,12 @@ function mergeInViewProperties(viewProperties: UniversalViewProperties, propsArg
             // by merging together all its style declarations into one
             viewProperties.style = {...viewProperties.style, ...propsArg.style}
         
-        } else if (viewProperties[name] !== undefined) {
+        } else if (viewPropertiesAsAny[name] !== undefined) {
             // Non-style properties must not be declared more than once
             throw new Error(`Property key declared twice: ${name}`)
         
         } else {
-            viewProperties[name] = propsArg[name]
+            viewPropertiesAsAny[name] = propsArgAsAny[name]
         }
     }
 }
