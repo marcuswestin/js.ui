@@ -66,7 +66,7 @@ type _AllViewStyles = DOMViewStyles | NativeViewStyles
 type _NativeOnlyViewStyles = Omit<NativeViewStyles, keyof DOMViewStyles>
 type _DOMOnlyViewStyles = Omit<DOMViewStyles, keyof NativeViewStyles>
 type _UniversalViewStyleKeys = Omit<_AllViewStyles, keyof _NativeOnlyViewStyles | keyof _DOMOnlyViewStyles>
-// ;((): ViewStyles => {return {}})(). // <- uncomment in vscode to see keys autocompleted
+// ;((): UniversalViewStyles => {return {}})(). // <- uncomment in vscode to see keys autocompleted
 // ;((): DOMOnlyViewStyles => {return {}})(). // <- uncomment in vscode to see keys autocompleted
 // ;((): NativeOnlyViewStyles => {return {}})(). // <- uncomment in vscode to see keys autocompleted
 
