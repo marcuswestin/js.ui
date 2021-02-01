@@ -57,10 +57,10 @@ export type UniversalViewProperties = {
 // universal styles case, and then implement the translation layer ourselves.
 export type DOMViewStyles = ReactCSSProperties
 export type NativeViewStyles = ReactNativeViewStyles
-export type UniversalViewStyles = {
-    // This is a bit of a gamble, and could prove unreliable - see note above.
-    [P in keyof _UniversalViewStyleKeys]?: NativeViewStyles[P]
-}
+// export type UniversalViewStyles = {
+//     // This is a bit of a gamble, and could prove unreliable - see note above.
+//     [P in keyof _UniversalViewStyleKeys]?: NativeViewStyles[P]
+// }
 // Compute UniversalViewStyleKeys, by first computing the
 type _AllViewStyles = DOMViewStyles | NativeViewStyles
 type _NativeOnlyViewStyles = Omit<NativeViewStyles, keyof DOMViewStyles>

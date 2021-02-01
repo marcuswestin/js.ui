@@ -10,10 +10,6 @@ export function Col(...args: ViewArg[]): View {
     return makeView(styles, ...args)
 }
 
-export function Style(styles: UniversalViewStyles): UniversalViewProperties {
-    return { style:styles }
-}
-
 export function FlexSize(flexGrow: number, flexShrink: number, flexBasis: number = 0) {
     return Style({ flexGrow, flexShrink, flexBasis })
 }
@@ -58,6 +54,13 @@ export function Margin(
 ) {
     return Style({ marginTop, marginRight, marginBottom, marginLeft })
 }
+
+// The universal Style function returns a value of type `any`, in order to allow for
+// all platforms to accept its results.
+export function Style(styles: UniversalViewStyles): any {
+    return { style:styles }
+}
+
 
 
 
