@@ -17,10 +17,10 @@ type ViewMakers = {
     // TODO: makeImageView
 }
 
+// setViewMakers is for internal use only.
+// It allows for the DOM and Native view engines to set the view maker functions,
+// which in turn get called by e.g the universal engine in order to create views.
 export function setViewMakers(theViewMakers: ViewMakers) {
-    if (viewMakers) {
-        throw new Error('setViewMakers called twice')
-    }
     viewMakers = theViewMakers
 }
 
