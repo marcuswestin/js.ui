@@ -2,8 +2,8 @@ import React, { ClassAttributes, HTMLAttributes } from 'react'
 import { DOMViewProperties, DOMViewStyles, DOMTextProps, DOMTextStyles, View, DOMViewArg, TextValue } from "./src/js.ui-types"
 import { makeView, setViewMakers } from "./src/js.ui-core"
 
-import { TextView, FlexFix, FlexSize } from "./universal"
-export { TextView, FlexFix, FlexSize }
+import { TextView, FlexFix, FlexSize, Padding, Margin } from "./universal"
+export { TextView, FlexFix, FlexSize, Padding, Margin }
 
 // View maker functions
 ///////////////////////

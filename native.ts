@@ -2,8 +2,8 @@ import React, { View as ReactNativeView, Text as ReactNativeText } from 'react-n
 import { NativeViewProperties, NativeViewStyles, NativeTextProps, NativeTextStyles, View, UniversalViewProperties } from "./src/js.ui-types"
 import { setViewMakers } from "./src/js.ui-core"
 
-import { Row, Col, TextView, FlexFix, FlexSize } from "./universal"
-export { Row, Col, TextView, FlexFix, FlexSize }
+import { Row, Col, TextView, FlexFix, FlexSize, Padding, Margin } from "./universal"
+export { Row, Col, TextView, FlexFix, FlexSize, Padding, Margin }
 
 // View maker functions
 ///////////////////////
