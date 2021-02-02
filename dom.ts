@@ -2,8 +2,8 @@ import React, { ClassAttributes, HTMLAttributes } from 'react'
 import { DOMViewProperties, DOMViewStyles, DOMTextProps, DOMTextStyles, View, DOMViewArg, TextValue } from "./src/js.ui-types"
 import { makeView, setViewMakers } from "./src/js.ui-core"
 
-import { TextView, FlexFix, Flex, Padding, Margin } from "./universal"
-export { TextView, FlexFix, Flex, Padding, Margin }
+import { FlexFix, Flex, Padding, Margin } from "./universal"
+export { FlexFix, Flex, Padding, Margin }
 
 // View maker functions
 ///////////////////////
@@ -35,9 +35,9 @@ export function Style<T>(styles: DOMViewStyles): DOMViewProperties<T> {
     return { style:styles }
 }
 
-export function DOMTextView(value: TextValue, properties?: DOMTextProps, styles?: DOMTextStyles): View {
+export function TextView(value: TextValue, styles?: DOMTextStyles, properties?: DOMTextProps): View {
     if (!properties) { properties = {} }
-    properties.style = Object.assign(properties.style, styles)
+    properties.style = Object.assign(properties.style || {}, styles)
     return React.createElement('span', properties, value.toString())
 }
 
