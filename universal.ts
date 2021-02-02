@@ -2,16 +2,16 @@ import { UniversalTextStyles, UniversalViewStyles, UniversalViewProperties, View
 import { makeView, viewMakers } from "./src/js.ui-core";
 
 export function Row(...args: ViewArg[]): View {
-    let styles = Style({ display:'flex', flexDirection: 'row', flexGrow:1, flexShrink:1 })
+    let styles = Style({ display:'flex', flexDirection: 'row' })
     return makeView(styles, ...args)
 }
 export function Col(...args: ViewArg[]): View {
-    let styles = Style({ display:'flex', flexDirection: 'column', flexGrow:1, flexShrink:1 })
+    let styles = Style({ display:'flex', flexDirection: 'column' })
     return makeView(styles, ...args)
 }
 
-export function FlexSize(flexGrow: number, flexShrink: number, flexBasis: number = 0) {
-    return Style({ flexGrow, flexShrink, flexBasis })
+export function Flex(flexGrow: number = 1, flexShrink: number = 1, flexBasis: number = 0) {
+    return Style({ display:'flex', flexGrow, flexShrink, flexBasis })
 }
 export function FlexFix(size: number) {
     return Style({ flexGrow: 0, flexShrink: 0, flexBasis: size })

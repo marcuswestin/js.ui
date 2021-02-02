@@ -2,8 +2,8 @@ import React, { ClassAttributes, HTMLAttributes } from 'react'
 import { DOMViewProperties, DOMViewStyles, DOMTextProps, DOMTextStyles, View, DOMViewArg, TextValue } from "./src/js.ui-types"
 import { makeView, setViewMakers } from "./src/js.ui-core"
 
-import { TextView, FlexFix, FlexSize, Padding, Margin } from "./universal"
-export { TextView, FlexFix, FlexSize, Padding, Margin }
+import { TextView, FlexFix, Flex, Padding, Margin } from "./universal"
+export { TextView, FlexFix, Flex, Padding, Margin }
 
 // View maker functions
 ///////////////////////
@@ -21,12 +21,12 @@ setViewMakers({
 // DOM-specific Rows, Cols, Style, TextViews, etc
 /////////////////////////////////////////////////
 
-Row.styles = Style({ display:'flex', flexDirection: 'row', flexGrow:1, flexShrink:1 })
+Row.styles = Style({ display:'flex', flexDirection: 'row' })
 export function Row(...args: DOMViewArg<HTMLDivElement>[]): View {
     return makeView(Row.styles, ...args)
 }
 
-Col.styles = Style({ display:'flex', flexDirection: 'column', flexGrow:1, flexShrink:1 })
+Col.styles = Style({ display:'flex', flexDirection: 'column' })
 export function Col(...args: DOMViewArg<HTMLDivElement>[]): View {
     return makeView(Col.styles, ...args)
 }
