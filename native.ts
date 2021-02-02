@@ -1,5 +1,5 @@
 import React, { View as ReactNativeView, Text as ReactNativeText } from 'react-native'
-import { NativeViewProperties, NativeViewStyles, NativeTextProps, NativeTextStyles, View, UniversalViewProperties } from "./src/js.ui-types"
+import { NativeViewProperties, NativeViewStyles, NativeTextProps, NativeTextStyles, View } from "./src/js.ui-types"
 import { setViewMakers } from "./src/js.ui-core"
 
 import { Row, Col, TextView, FlexFix, Flex, Padding, Margin } from "./universal"
@@ -26,7 +26,7 @@ export function NativeTextView(text: string, properties?: NativeTextProps, style
     return React.createElement('span', properties, text)
 }
 
-export function Style(styles: NativeViewStyles): UniversalViewProperties {
+export function Style(styles: NativeViewStyles): NativeViewProperties {
     return { style:styles }
 }
 
