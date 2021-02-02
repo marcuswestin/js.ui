@@ -43,7 +43,7 @@ export function DOMTextView(value: TextValue, properties?: DOMTextProps, styles?
 
 export type EventHandler<T> = (event: React.MouseEvent<T, MouseEvent>) => void
 export function OnTap<T>(handler: EventHandler<T>) {
-    return { style: { cursor:'pointer'}, onClick: handler }
+    return { className: 'tappable', onClick: handler }
 }
 
 // Ref returns a view element with the given tag and react Ref object
