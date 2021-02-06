@@ -1,4 +1,4 @@
-import { UniversalTextStyles, UniversalViewStyles, UniversalViewProperties, View, ViewArg, TextValue } from "./src/js.ui-types";
+import { UniversalTextStyles, UniversalViewStyles, View, ViewArg, TextValue } from "./src/js.ui-types";
 import { makeView, viewMakers } from "./src/js.ui-core";
 
 export function Row(...args: ViewArg[]): View {
