@@ -56,3 +56,12 @@ export function Ref<P extends HTMLAttributes<T>, T>(tag: string, ref: React.RefO
 export function DOMElement<T>(tag: string, properties: DOMViewProperties<T>, children: View[]) {
     return React.createElement(tag, properties, children)
 }
+
+export type EllipsisValue = 'clip' | 'ellipsis' | 'fade' | string | undefined
+export const Ellipsis = function<T>(value: EllipsisValue = 'ellipsis') {
+    return Style<T>({ textOverflow:value, whiteSpace:'nowrap', display:'inline', overflow:'hidden' })
+}
+
+export function Key(key: string) {
+    return { key: key }
+}
