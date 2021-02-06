@@ -2,7 +2,8 @@ import React from "react"
 import { View, ViewArg, UniversalViewProperties } from "./js.ui-types"
 
 let flags = {
-    ENABLE_AUTO_CHILD_KEYS: true
+    ENABLE_AUTO_CHILD_KEYS: true,
+    ENABLE_DEBUG_BACKGROUNDS: false,
 }
 
 export let viewMakers: ViewMakers
@@ -50,9 +51,9 @@ export function makeView(...viewArgs: any[]): View {
     // }
 
 //TODO
-    // if (flags.ENABLE_DEBUG_BACKGROUNDS) {
-    //     enableDebugBackgrounds(viewProperties)
-    // }
+    if (flags.ENABLE_DEBUG_BACKGROUNDS) {
+        enableDebugBackgrounds(viewProperties)
+    }
 
     if (flags.ENABLE_AUTO_CHILD_KEYS) {
         enableAutoKeysForChildren(viewChildren)
@@ -78,6 +79,18 @@ function enableAutoKeysForChildren(children: View[]) {
         children[i] = React.cloneElement(child, { key:key })
     }
 }
+
+function enableDebugBackgrounds(props: any) {
+    if (props.style == null) {
+        props.style = {}
+    }
+    if (props.style.background == null) {
+        let randRBG = () => Math.random() * 255
+        let colors = [randRBG(), randRBG(), randRBG(), 0.75]
+        props.style.background = `rgba(${colors.join(',')})`
+    }
+}
+
 
 // processArgsIntoPropsAndChildren takes a takes a list of view arguments to process,
 // and populates the given set of view properties and children.
