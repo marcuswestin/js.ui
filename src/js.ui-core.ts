@@ -1,5 +1,5 @@
 import React from "react"
-import { View, ViewArg, UniversalViewProperties, ReactElement } from "./js.ui-types"
+import { View, ViewArg, UniversalViewProperties } from "./js.ui-types"
 
 let flags = {
     ENABLE_AUTO_CHILD_KEYS: true
@@ -70,7 +70,7 @@ function enableAutoKeysForChildren(children: View[]) {
         if (!React.isValidElement(children[i])) {
             continue
         }
-        let child = children[i] as ReactElement
+        let child = children[i] as View
         if (child.key) {
             continue
         }

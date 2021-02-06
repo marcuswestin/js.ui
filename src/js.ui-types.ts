@@ -8,10 +8,9 @@ import {
 import {
     CSSProperties as ReactCSSProperties,
     HTMLAttributes as ReactDOMProperties,
-    ReactElement,
+    HTMLProps as ReactHTMLProperties,
+    ReactElement as ReactElement,
 } from 'react'
-
-export { ReactElement }
 
 // Views, and their arguments
 /////////////////////////////
