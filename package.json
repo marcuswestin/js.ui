@@ -16,14 +16,16 @@
     "url": "https://github.com/marcuswestin/js.ui/issues"
   },
   "homepage": "https://github.com/marcuswestin/js.ui#readme",
-  "peerDependencies": {
-    "react": "^16.14.0",
-    "react-dom": "^16.13.1",
-    "react-native": "^0.63.3"
+  "dependencies": {
+    "mobx": "^6.1.4",
+    "mobx-react-lite": "^3.2.0",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "react-native": "^0.63.4"
   },
   "devDependencies": {
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
-    "@types/react-native": "^0.63.46"
+    "@types/react-native": "^0.63.4"
   }
 }

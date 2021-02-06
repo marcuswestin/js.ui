@@ -15,3 +15,10 @@ It does however handle some things that we need to manually account for
      - without JSX, we need to manually name every element in the UI tree
      - JSX resolves this by auto-generating an incrementing number as key for every
          child element that has no key
+
+### Development
+
+  yarn
+  yarn link
+  # in other project using js.ui:
+  yarn link js.ui
