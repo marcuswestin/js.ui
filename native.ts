@@ -9,7 +9,7 @@ export { FlexFix, Flex, Padding, Margin }
 // View maker functions
 ///////////////////////
 
-function makeTextView(properties: NativeTextProps, text: string) {
+function makeTextView(properties: NativeTextProps, text: TextValue) {
     return React.createElement(ReactNativeText, properties, text)
 }
 

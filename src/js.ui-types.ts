@@ -114,9 +114,7 @@ type DOMOnlyTextStyles = Omit<DOMTextStyles, keyof NativeTextStyles>
 type SharedTextStyles = Omit<AllTextStyles, keyof NativeOnlyTextStyles | keyof DOMOnlyTextStyles>
 // ((): TextStyles => {return {}})(). // <- uncomment in vscode to see keys autocompleted
 
-
-export interface TextValue { toString(): string }
-
+export type TextValue = string | number
 export type DOMTextProps = ReactDOMProperties<Text>
 export type NativeTextProps = ReactNativeTextProps
 // export type TextProperties = {

@@ -13,7 +13,7 @@ setViewMakers({
     makeView(properties: DOMViewProperties<HTMLDivElement>, children: View[]) {
         return React.createElement('div', properties, children)
     },
-    makeTextView(properties: DOMTextProps, text: string) {
+    makeTextView(properties: DOMTextProps, text: TextValue) {
         return React.createElement('span', properties, text)
     },
 })
