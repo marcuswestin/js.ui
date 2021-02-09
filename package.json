@@ -15,7 +15,7 @@
     "url": "https://github.com/marcuswestin/js.ui/issues"
   },
   "homepage": "https://github.com/marcuswestin/js.ui#readme",
-  "dependencies": {
+  "peerDependencies": {
     "mobx": "^6",
     "mobx-react-lite": "^3",
     "react": "^16",
