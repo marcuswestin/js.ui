@@ -1,4 +1,11 @@
-import { View as ReactNativeView, Text as ReactNativeText } from 'react-native'
+import {
+    View as ReactNativeView,
+    Text as ReactNativeText,
+    StyleSheet as ReactNativeStyleSheet,
+    ImageStyle as ReactNativeImageStyle,
+    TextStyle as ReactNativeTextStyle,
+    ViewStyle as ReactNativeViewStyle,
+} from 'react-native'
 import { View, NativeViewProperties, NativeViewStyles, NativeTextProps, NativeTextStyles, NativeViewArg, TextValue } from "./src/js.ui-types"
 import { makeView, setViewMakers } from "./src/js.ui-core"
 import React from 'react'
@@ -32,6 +39,18 @@ export function Row(...args: NativeViewArg[]): View {
 Col.styles = Style({ display:'flex', flexDirection: 'column' })
 export function Col(...args: NativeViewArg[]): View {
     return makeView(Col.styles, ...args)
+}
+
+type NamedStyles<T> = { [P in keyof T]: ReactNativeViewStyle | ReactNativeTextStyle | ReactNativeImageStyle };
+type NamedStyleSheets = { style: ReactNativeViewStyle } | { style: ReactNativeTextStyle } | { style: ReactNativeImageStyle }
+export function makeStyleSheet<T extends NamedStyles<T> | NamedStyles<any>>(styles: T | NamedStyles<T>): { [P in keyof T]: NamedStyleSheets } {
+    const styleSheets = ReactNativeStyleSheet.create(styles)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result: any = {}
+    for (const key of Object.keys(styleSheets)) {
+        result[key] = { style: styleSheets[key] }
+    }
+    return result
 }
 
 export function Style(styles: NativeViewStyles): NativeViewProperties {
