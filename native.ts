@@ -45,7 +45,6 @@ type NamedStyles<T> = { [P in keyof T]: ReactNativeViewStyle | ReactNativeTextSt
 type NamedStyleSheets = { style: ReactNativeViewStyle } | { style: ReactNativeTextStyle } | { style: ReactNativeImageStyle }
 export function makeStyleSheet<T extends NamedStyles<T> | NamedStyles<any>>(styles: T | NamedStyles<T>): { [P in keyof T]: NamedStyleSheets } {
     const styleSheets = ReactNativeStyleSheet.create(styles)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const result: any = {}
     for (const key of Object.keys(styleSheets)) {
         result[key] = { style: styleSheets[key] }
