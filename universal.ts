@@ -55,6 +55,15 @@ export function Margin(
     return Style({ marginTop, marginRight, marginBottom, marginLeft })
 }
 
+export function BorderRadius(
+    borderTopLeftRadius: number,
+    borderTopRightRadius: number = borderTopLeftRadius,
+    borderBottomRightRadius: number = borderTopLeftRadius,
+    borderBottomLeftRadius: number = borderTopRightRadius,
+) {
+    return Style({ borderTopLeftRadius, borderTopRightRadius, borderBottomRightRadius, borderBottomLeftRadius })
+}
+
 // The universal Style function returns a value of type `any`, in order to allow for
 // all platforms to accept its results.
 export function Style(styles: UniversalViewStyles): any {
