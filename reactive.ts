@@ -28,12 +28,14 @@ export function makeStoreReactive(store: any) {
 // makeReactiveUI takes a render function, and re-renders it any time that
 // a reactive store that was used during the render function gets mutated.
 // export function makeReactiveUI(fn: () => View ) {
-export function makeReactiveUI<P extends object>(fn: (props: React.FunctionComponent<P>) => View ) {
-    let ObservedElement = observer(fn)
-    return function() {
-        return createElement(ObservedElement)
+  export function makeReactiveUI<F extends Function>(fn: F): F {
+    let ObservedElement = observer((props: React.FunctionComponent<P>) => {
+      return fn(...props.jsuiArgs)
+    })
+    return function(...args: any[]) {
+      return createElement(ObservedElement, { jsuiArgs: args })
     }
-}
+  }
 
 type ReactiveStore<T> = IObservableValue<T>
 type ReactiveStoreObserver = (change: IValueDidChange) => void
