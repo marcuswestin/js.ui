@@ -5,6 +5,8 @@ import { makeView, setViewMakers } from "./src/js.ui-core"
 import { FlexFix, Flex, Padding, Margin } from "./universal"
 export { FlexFix, Flex, Padding, Margin }
 
+export { DOMViewProperties as ViewProperties }
+
 // View maker functions
 ///////////////////////
 
