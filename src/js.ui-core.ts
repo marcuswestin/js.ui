@@ -100,7 +100,7 @@ function enableDebugBackgrounds(props: any) {
 // And Arrays are unwrapped and recursively processed.
 function processArgsIntoPropsAndChildren(viewProperties: UniversalViewProperties, viewChildren: View[], viewArgsToProcess: ViewArg[]) {
     for (let viewArg of viewArgsToProcess) {
-        if (!viewArg) {
+        if (!viewArg || typeof viewArg === 'boolean') {
             continue
 
         } else if (React.isValidElement(viewArg)) {
