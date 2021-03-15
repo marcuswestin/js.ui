@@ -57,7 +57,7 @@ export function Margin(
 
 // The universal Style function returns a value of type `any`, in order to allow for
 // all platforms to accept its results.
-export function Style(styles: UniversalViewStyles): any {
+export function Style(styles: UniversalViewStyles): { style: any } {
     return { style:styles }
 }
 

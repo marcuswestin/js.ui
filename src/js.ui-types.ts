@@ -11,14 +11,15 @@ import {
     HTMLProps as ReactHTMLProperties,
     ReactElement as ReactElement,
 } from 'react'
+import { DOMStyles } from 'js.ui/dom'
 
 // Views, and their arguments
 /////////////////////////////
 
-export type View = ReactElement
-export type ViewArg =    UniversalViewProperties | View | null | undefined | ViewArg[]
-export type DOMViewArg<T> = DOMViewProperties<T> | View | null | undefined | DOMViewArg<T>[]
-export type NativeViewArg = NativeViewProperties | View | null | undefined | NativeViewArg[]
+export type View = ReactElement | null | undefined | boolean
+export type ViewArg =    UniversalViewProperties | View | ViewArg[]
+export type DOMViewArg<T> = DOMViewProperties<T> | View | DOMViewArg<T>[] | DOMStyles
+export type NativeViewArg = NativeViewProperties | View | NativeViewArg[]
 
 
 // View Properties, across platforms
@@ -29,6 +30,7 @@ export type NativeViewProperties = ReactNativeViewProps
 export type UniversalViewProperties = {
     // Right now we declare universal properties manually.
     style?: UniversalViewStyles,
+    className?: string,
 
     // If we decide to compute style types instead, then we should probably
     // use NativeViewStyle values, since they are more restrictive than DOM ones:

@@ -1,3 +1,4 @@
+import { StyleSheet, css, StyleDeclaration, StyleDeclarationValue, CSSProperties, StyleDeclarationMap } from 'aphrodite'
 import React, { ClassAttributes, HTMLAttributes } from 'react'
 import { DOMViewProperties, DOMViewStyles, DOMTextProps, DOMTextStyles, View, DOMViewArg, TextValue } from "./src/js.ui-types"
 import { makeView, setViewMakers } from "./src/js.ui-core"
@@ -66,4 +67,25 @@ export const Ellipsis = function<T>(value: EllipsisValue = 'ellipsis') {
 
 export function Key(key: string) {
     return { key: key }
+}
+
+export function makeStyleSheet(...styles: CSSProperties[]): DOMStyles {
+  let combinedStyles: CSSProperties = {}
+  for (let style of styles) {
+    if ((style as any).style) {
+      style = (style as any).style
+    }
+    combinedStyles = { ...combinedStyles, ...style }
+  }
+
+  const styleSheet = StyleSheet.create({ a: combinedStyles })
+  return new DOMStyles(styleSheet.a)
+}
+
+export class DOMStyles {
+  constructor(private style: StyleDeclarationValue) {}
+
+  get props() {
+    return { className:css(this.style) }
+  }
 }

@@ -1,3 +1,4 @@
+import { DOMStyles } from "js.ui/dom"
 import React from "react"
 import { View, ViewArg, UniversalViewProperties } from "./js.ui-types"
 
@@ -108,6 +109,9 @@ function processArgsIntoPropsAndChildren(viewProperties: UniversalViewProperties
         } else if (Array.isArray(viewArg)) {
             processArgsIntoPropsAndChildren(viewProperties, viewChildren, viewArg)
 
+        } else if (viewArg instanceof DOMStyles) {
+          mergeInViewProperties(viewProperties, viewArg.props)
+
         } else if (typeof viewArg === 'object') {
             let propsArg = viewArg as UniversalViewProperties
             mergeInViewProperties(viewProperties, propsArg)
@@ -132,7 +136,10 @@ function mergeInViewProperties(viewProperties: UniversalViewProperties, propsArg
             // Allow for multiple style declaration arguments per UI view element
             // by merging together all its style declarations into one
             viewProperties.style = {...viewProperties.style, ...propsArg.style}
-        
+
+        } else if (name === 'className') {
+          viewProperties.className = `${viewProperties.className || ''} ${propsArg.className}`
+
         } else if (viewPropertiesAsAny[name] !== undefined) {
             // Non-style properties must not be declared more than once
             throw new Error(`Property key declared twice: ${name}`)
