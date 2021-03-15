@@ -1,4 +1,4 @@
-import { StyleSheet, css, StyleDeclaration, StyleDeclarationValue, CSSProperties, StyleDeclarationMap } from 'aphrodite'
+import { StyleSheet, css, StyleDeclarationValue, CSSProperties } from 'aphrodite'
 import React, { ClassAttributes, HTMLAttributes } from 'react'
 import { DOMViewProperties, DOMViewStyles, DOMTextProps, DOMTextStyles, View, DOMViewArg, TextValue } from "./src/js.ui-types"
 import { makeView, setViewMakers } from "./src/js.ui-core"
@@ -84,6 +84,8 @@ export function makeStyleSheet(...styles: CSSProperties[]): DOMStyles {
 
 export class DOMStyles {
   constructor(private style: StyleDeclarationValue) {}
+
+  readonly __isDOMStyles = true
 
   get props() {
     return { className:css(this.style) }

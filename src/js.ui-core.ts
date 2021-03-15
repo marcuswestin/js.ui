@@ -1,4 +1,3 @@
-import { DOMStyles } from "js.ui/dom"
 import React from "react"
 import { View, ViewArg, UniversalViewProperties } from "./js.ui-types"
 
@@ -109,7 +108,7 @@ function processArgsIntoPropsAndChildren(viewProperties: UniversalViewProperties
         } else if (Array.isArray(viewArg)) {
             processArgsIntoPropsAndChildren(viewProperties, viewChildren, viewArg)
 
-        } else if (viewArg instanceof DOMStyles) {
+        } else if (viewArg.__isDOMStyles) {
           mergeInViewProperties(viewProperties, viewArg.props)
 
         } else if (typeof viewArg === 'object') {
