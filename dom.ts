@@ -6,6 +6,9 @@ import { makeView, setViewMakers } from "./src/js.ui-core"
 import { FlexFix, Flex, Padding, Margin } from "./universal"
 export { FlexFix, Flex, Padding, Margin }
 
+import { makeReactiveUI, makeStoreReactive, observeReactiveStore } from './reactive'
+export { makeReactiveUI, makeStoreReactive, observeReactiveStore }
+
 export { DOMViewProperties as ViewProperties }
 
 // View maker functions

@@ -13,6 +13,9 @@ import React from 'react'
 import { FlexFix, Flex, Padding, Margin } from "./universal"
 export { FlexFix, Flex, Padding, Margin }
 
+import { makeReactiveUI, makeStoreReactive, observeReactiveStore } from './reactive'
+export { makeReactiveUI, makeStoreReactive, observeReactiveStore }
+
 // View maker functions
 ///////////////////////
 
