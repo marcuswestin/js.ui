@@ -1,6 +1,7 @@
 import {
     View as ReactNativeView,
     Text as ReactNativeText,
+    Button as ReactNativeButton,
     StyleSheet as ReactNativeStyleSheet,
     ImageStyle as ReactNativeImageStyle,
     TextStyle as ReactNativeTextStyle,
@@ -63,6 +64,13 @@ export function Text(text: TextValue, properties?: NativeTextProps, styles?: Nat
     if (!properties) { properties = {} }
     properties.style = Object.assign(properties.style || {}, styles)
     return makeTextView(properties, text.toString())
+}
+
+export function Button(text: TextValue, onPress: () => void) {
+    return React.createElement(ReactNativeButton, {
+        title: text.toString(),
+        onPress: onPress,
+    })
 }
 
 // export let NativeElement = React.createElement
