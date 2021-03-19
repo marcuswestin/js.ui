@@ -1,12 +1,5 @@
-import {
-    View as ReactNativeView,
-    Text as ReactNativeText,
-    Button as ReactNativeButton,
-    StyleSheet as ReactNativeStyleSheet,
-    ImageStyle as ReactNativeImageStyle,
-    TextStyle as ReactNativeTextStyle,
-    ViewStyle as ReactNativeViewStyle,
-} from 'react-native'
+/* eslint-disable prettier/prettier */
+import * as RN from 'react-native'
 import { View, NativeViewProperties, NativeViewStyles, NativeTextProps, NativeTextStyles, NativeViewArg, TextValue } from "./src/js.ui-types"
 import { makeView, setViewMakers } from "./src/js.ui-core"
 import React from 'react'
@@ -21,13 +14,13 @@ export { makeReactiveUI, makeStoreReactive, observeReactiveStore }
 ///////////////////////
 
 function makeTextView(properties: NativeTextProps, text: TextValue) {
-    return React.createElement(ReactNativeText, properties, text)
+    return React.createElement(RN.Text, properties, text)
 }
 
 setViewMakers({
     engine: 'Native',
     makeView(properties: NativeViewProperties, children: View[]) {
-        return React.createElement(ReactNativeView, properties, children)
+        return React.createElement(RN.View, properties, children)
     },
     makeTextView,
 })
@@ -45,10 +38,10 @@ export function Col(...args: NativeViewArg[]): View {
     return makeView(Col.styles, ...args)
 }
 
-type NamedStyles<T> = { [P in keyof T]: ReactNativeViewStyle | ReactNativeTextStyle | ReactNativeImageStyle };
-type NamedStyleSheets = { style: ReactNativeViewStyle } | { style: ReactNativeTextStyle } | { style: ReactNativeImageStyle }
+type NamedStyles<T> = { [P in keyof T]: RN.ViewStyle | RN.TextStyle | RN.ImageStyle };
+type NamedStyleSheets = { style: RN.ViewStyle } | { style: RN.TextStyle } | { style: RN.ImageStyle }
 export function makeStyleSheet<T extends NamedStyles<T> | NamedStyles<any>>(styles: T | NamedStyles<T>): { [P in keyof T]: NamedStyleSheets } {
-    const styleSheets = ReactNativeStyleSheet.create(styles)
+    const styleSheets = RN.StyleSheet.create(styles)
     const result: any = {}
     for (const key of Object.keys(styleSheets)) {
         result[key] = { style: styleSheets[key] }
@@ -67,7 +60,7 @@ export function Text(text: TextValue, properties?: NativeTextProps, styles?: Nat
 }
 
 export function Button(text: TextValue, onPress: () => void) {
-    return React.createElement(ReactNativeButton, {
+    return React.createElement(RN.Button, {
         title: text.toString(),
         onPress: onPress,
     })
