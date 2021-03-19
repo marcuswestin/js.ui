@@ -66,4 +66,10 @@ export function Button(text: TextValue, onPress: () => void) {
     })
 }
 
+export type TextInputProps = RN.TextInputProps
+export function TextInput(...props: TextInputProps[]) {
+    const mergedProps = Object.assign({}, ...props)
+    return React.createElement(RN.TextInput, mergedProps)
+}
+
 // export let NativeElement = React.createElement
