@@ -1,8 +1,9 @@
 # js.ui
 
-js.ui provides an idiomatic approach to creating UI code in vanilla JS.
-It is designed to address a set of specific shortcomings of JSX.
-Notably, JSX falls short on two fronts:
+js.ui provides an idiomatic approach to creating reactive FlexBox UI
+code without JSX that is consistent across react-native and react-dom.
+It is designed to address a set of specific shortcomings of JSX - notably,
+JSX falls short on two fronts:
 
 -   The parameters API
     -   Klunky and difficult to specify types
