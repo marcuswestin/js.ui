@@ -1,7 +1,6 @@
-import { makeAutoObservable, observe, IObservableValue, IValueDidChange } from "mobx"
-import { observer } from "mobx-react-lite"
-import { createElement } from "react"
-import { View } from "./src/js.ui-types"
+import { makeAutoObservable, observe, IObservableValue, IValueDidChange } from 'mobx'
+import { observer } from 'mobx-react-lite'
+import React from 'react'
 
 // reactive is a minimal wrapper around mobx and mobx-react-lite. It provides an
 // idiomatic approach to client state management and automatic ui render updates.
@@ -28,14 +27,17 @@ export function makeStoreReactive(store: any) {
 // makeReactiveUI takes a render function, and re-renders it any time that
 // a reactive store that was used during the render function gets mutated.
 // export function makeReactiveUI(fn: () => View ) {
-  export function makeReactiveUI<F extends Function>(fn: F): F {
-    let ObservedElement = observer((props: React.FunctionComponent<P>) => {
-      return fn(...props.jsuiArgs)
+// export function makeReactiveUI<F extends Function>(fn: F): F {
+export function makeReactiveUI<F extends Function>(fn: F): any {
+    // TODO: HACK, fix up props type
+    // let ObservedElement = observer((props: React.FunctionComponent<F>) => {
+    let ObservedElement = observer((props: any) => {
+        return fn(...props.jsuiArgs)
     })
-    return function(...args: any[]) {
-      return createElement(ObservedElement, { jsuiArgs: args })
+    return function (...args: any[]) {
+        return React.createElement(ObservedElement, { jsuiArgs: args })
     }
-  }
+}
 
 type ReactiveStore<T> = IObservableValue<T>
 type ReactiveStoreObserver = (change: IValueDidChange) => void

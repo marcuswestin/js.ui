@@ -16,6 +16,7 @@
   },
   "homepage": "https://github.com/marcuswestin/js.ui#readme",
   "peerDependencies": {
+    "aphrodite": "^2.4.0",
     "mobx": "^6",
     "mobx-react-lite": "^3",
     "react": "^16",
@@ -26,8 +27,5 @@
     "@types/react": "^16",
     "@types/react-dom": "^16",
     "@types/react-native": "^0.63"
-  },
-  "dependencies": {
-    "aphrodite": "^2.4.0"
   }
 }

@@ -1,38 +1,20 @@
-import React from "react"
-import { View, ViewArg, UniversalViewProperties } from "./js.ui-types"
+import React from 'react'
+
+export type View = React.ReactElement | null | undefined | boolean
+export type TextValue = string | number
 
 let flags = {
     ENABLE_AUTO_CHILD_KEYS: true,
     ENABLE_DEBUG_BACKGROUNDS: false,
 }
 
-export let viewMakers: ViewMakers
-
-export type TextViewMaker = (properties: any, text: string) => View
-export type ViewMaker = (properties: any, children: View[]) => View
-export type ViewEngine = 'Native' | 'DOM'
-type ViewMakers = {
-    engine: ViewEngine,
-    makeView: ViewMaker,
-    makeTextView: TextViewMaker,
-    // TODO: makeImageView
+type ViewArg = View | ViewArg[]
+type UniversalViewProperties = any
+type ProcessedViewArgs = {
+    viewProperties: UniversalViewProperties
+    viewChildren: View[] | null
 }
-
-// setViewMakers is for internal use only.
-// It allows for the DOM and Native view engines to set the view maker functions,
-// which in turn get called by e.g the universal engine in order to create views.
-export function setViewMakers(theViewMakers: ViewMakers) {
-    viewMakers = theViewMakers
-}
-
-// makeView is for internal use only.
-// It takes a list of view arguments, and processes them into a view with the
-// given properties. Each view argument can be a properties object, a child view, a
-// list of additional view arguments to unwrap (which allows for e.g a view property
-// function to add multiple children, properties, etc), or null/undefined. It will
-// also apply optional properties, such as automatically settings keys for all child
-// views.
-export function makeView(...viewArgs: any[]): View {
+export function processViewArgs(...viewArgs: any[]): ProcessedViewArgs {
     let viewProperties: UniversalViewProperties = {}
     let viewChildren: View[] | null = []
 
@@ -58,12 +40,12 @@ export function makeView(...viewArgs: any[]): View {
     if (flags.ENABLE_AUTO_CHILD_KEYS) {
         enableAutoKeysForChildren(viewChildren)
     }
-    
-    // viewChildren = (viewChildren.length === 0
-    //     ? null // React complains if "void" tags (eg input) have non-null viewChildren (even an empty array)
-    //     : viewChildren)
 
-    return viewMakers.makeView(viewProperties, viewChildren)
+    viewChildren = (viewChildren.length === 0
+        ? null // React complains if "void" tags (eg input) have non-null viewChildren (even an empty array)
+        : viewChildren)
+    
+    return { viewProperties, viewChildren }
 }
 
 function enableAutoKeysForChildren(children: View[]) {
@@ -71,7 +53,7 @@ function enableAutoKeysForChildren(children: View[]) {
         if (!React.isValidElement(children[i])) {
             continue
         }
-        let child = children[i] as View
+        let child = children[i] as React.ReactElement
         if (child.key) {
             continue
         }
@@ -107,10 +89,9 @@ function processArgsIntoPropsAndChildren(viewProperties: UniversalViewProperties
 
         } else if (Array.isArray(viewArg)) {
             processArgsIntoPropsAndChildren(viewProperties, viewChildren, viewArg)
-
-        } else if (viewArg.__isDOMStyles) {
-          mergeInViewProperties(viewProperties, viewArg.props)
-
+        // TODO: HACK
+        } else if ((viewArg as any).__isDOMStyles) {
+            mergeInViewProperties(viewProperties, (viewArg as any).props)
         } else if (typeof viewArg === 'object') {
             let propsArg = viewArg as UniversalViewProperties
             mergeInViewProperties(viewProperties, propsArg)

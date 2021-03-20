@@ -1,96 +1,121 @@
-import { StyleSheet, css, StyleDeclarationValue, CSSProperties } from 'aphrodite'
-import React, { ClassAttributes, HTMLAttributes } from 'react'
-import { DOMViewProperties, DOMViewStyles, DOMTextProps, DOMTextStyles, View, DOMViewArg, TextValue } from "./src/js.ui-types"
-import { makeView, setViewMakers } from "./src/js.ui-core"
+import React from 'react'
+import * as aphrodite from 'aphrodite'
 
-import { FlexFix, Flex, Padding, Margin } from "./universal"
-export { FlexFix, Flex, Padding, Margin }
+import { processViewArgs, TextValue, View } from './src/js.ui-core'
 
+import { FlexFix, Flex, Padding, Margin, Alpha } from './universal'
 import { makeReactiveUI, makeStoreReactive, observeReactiveStore } from './reactive'
+
+export { FlexFix, Flex, Padding, Margin, Alpha }
 export { makeReactiveUI, makeStoreReactive, observeReactiveStore }
+export type { View } from './src/js.ui-core'
 
-export { DOMViewProperties as ViewProperties }
+// Universal: TextView, Row, Col, Style, etc...
+///////////////////////////////////////////////
 
-// View maker functions
-///////////////////////
+export function TextView(text: TextValue, styles?: DOMTextStyles, props?: DOMTextProps): View {
+    if (!props) { props = {} }
+    props.style = Object.assign(props.style || {}, styles)
+    return React.createElement('span', props, text.toString())
+}
 
-setViewMakers({
-    engine: 'DOM',
-    makeView(properties: DOMViewProperties<HTMLDivElement>, children: View[]) {
-        return React.createElement('div', properties, children)
-    },
-    makeTextView(properties: DOMTextProps, text: TextValue) {
-        return React.createElement('span', properties, text)
-    },
-})
-
-// DOM-specific Rows, Cols, Style, TextViews, etc
-/////////////////////////////////////////////////
-
-Row.styles = Style({ display:'flex', flexDirection: 'row' })
+Row.styles = Style<HTMLDivElement>({ display: 'flex', flexDirection: 'row' })
 export function Row(...args: DOMViewArg<HTMLDivElement>[]): View {
-    return makeView(Row.styles, ...args)
+    return makeView('div', Row.styles, ...args)
 }
 
-Col.styles = Style({ display:'flex', flexDirection: 'column' })
+Col.styles = Style<HTMLDivElement>({ display: 'flex', flexDirection: 'column' })
 export function Col(...args: DOMViewArg<HTMLDivElement>[]): View {
-    return makeView(Col.styles, ...args)
+    return makeView('div', Col.styles, ...args)
 }
 
-export function Style<T>(styles: DOMViewStyles): DOMViewProperties<T> {
-    return { style:styles }
+export function Style<T=HTMLDivElement>(styles: DOMViewStyles): DOMViewProperties<T> {
+    return { style: styles }
 }
 
-export function TextView(value: TextValue, styles?: DOMTextStyles, properties?: DOMTextProps): View {
-    if (!properties) { properties = {} }
-    properties.style = Object.assign(properties.style || {}, styles)
-    return React.createElement('span', properties, value.toString())
+// Universal StyleSheets
+////////////////////////
+
+type StyleSheetProperties = aphrodite.CSSProperties
+export function makeStyleSheet(...styles: StyleSheetProperties[]): DOMStyles {
+    let combinedStyles: StyleSheetProperties = {}
+    for (let style of styles) {
+        if ((style as any).style) {
+            style = (style as any).style
+        }
+        combinedStyles = { ...combinedStyles, ...style }
+    }
+
+    const styleSheet = aphrodite.StyleSheet.create({ a: combinedStyles })
+    return new DOMStyles(styleSheet.a)
 }
 
-export type EventHandler<T> = (event: React.MouseEvent<T, MouseEvent>) => void
-export function OnTap<T>(handler: EventHandler<T>) {
-    return { className: 'tappable', onClick: handler }
+export class DOMStyles {
+    constructor(private style: aphrodite.StyleDeclarationValue) {}
+
+    readonly __isDOMStyles = true
+
+    get props() {
+        return { className: aphrodite.css(this.style) }
+    }
 }
+
+// View helpers: Buttons, Inputs...
+///////////////////////////////////
+
+export let Button = makeViewConstructor<HTMLButtonElement>('button')
+export let Div = makeViewConstructor<HTMLDivElement>('div')
+export let Span = makeViewConstructor<HTMLSpanElement>('span')
+export let TextArea = makeViewConstructor<HTMLTextAreaElement>('textarea')
+export let Form = makeViewConstructor<HTMLFormElement>('form')
+export let Input = makeViewConstructor<HTMLInputElement>('input')
 
 // Ref returns a view element with the given tag and react Ref object
-export function Ref<P extends HTMLAttributes<T>, T>(tag: string, ref: React.RefObject<T>, properties: ClassAttributes<T> & P, children?: React.ReactNode[]): View {
+export function Ref<P extends React.HTMLAttributes<T>, T>(
+    tag: string,
+    ref: React.RefObject<T>,
+    properties: React.ClassAttributes<T> & P,
+    children?: React.ReactNode[],
+): View {
     properties.ref = ref
     return React.createElement(tag, properties, children)
 }
 
-// DomElement allows you to create any react DOM element
-export function DOMElement<T>(tag: string, properties: DOMViewProperties<T>, children: View[]) {
-    return React.createElement(tag, properties, children)
+
+// Universal Style functions: BoxShadow, Ellipsis...
+////////////////////////////////////////////////////
+
+export function BoxShadow<T>(xOffset: Dim, yOffset: Dim, shadowRadius: Dim, shadowColor: string) {
+    let boxShadow = [px(xOffset), px(yOffset), px(shadowRadius), shadowColor].join(' ')
+    return Style<T>({ boxShadow: boxShadow })
 }
 
 export type EllipsisValue = 'clip' | 'ellipsis' | 'fade' | string | undefined
-export const Ellipsis = function<T>(value: EllipsisValue = 'ellipsis') {
-    return Style<T>({ textOverflow:value, whiteSpace:'nowrap', display:'inline', overflow:'hidden' })
+export const Ellipsis = function<T=HTMLSpanElement>(value: EllipsisValue = 'ellipsis') {
+    return Style<T>({ display: 'inline', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: value })
 }
 
-export function Key(key: string) {
-    return { key: key }
+// Internal
+///////////
+
+function makeView<T>(tagName: string, ...viewArgs: DOMViewArg<T>[]) {
+    const { viewProperties, viewChildren } = processViewArgs(...viewArgs)
+    return React.createElement(tagName, viewProperties, viewChildren)
 }
 
-export function makeStyleSheet(...styles: CSSProperties[]): DOMStyles {
-  let combinedStyles: CSSProperties = {}
-  for (let style of styles) {
-    if ((style as any).style) {
-      style = (style as any).style
-    }
-    combinedStyles = { ...combinedStyles, ...style }
-  }
-
-  const styleSheet = StyleSheet.create({ a: combinedStyles })
-  return new DOMStyles(styleSheet.a)
+function makeViewConstructor<T>(tagName: string) {
+    return (...viewArgs: DOMViewArg<T>[]) => makeView(tagName, viewArgs)
 }
 
-export class DOMStyles {
-  constructor(private style: StyleDeclarationValue) {}
+type Dim = number | string
 
-  readonly __isDOMStyles = true
-
-  get props() {
-    return { className:css(this.style) }
-  }
+function px(arg: Dim) {
+    return typeof arg === 'number' ? `${arg}px` : arg
 }
+
+type DOMViewArg<T> = DOMViewProperties<T> | View | DOMViewArg<T>[] | DOMStyles
+type DOMViewProperties<T> = React.HTMLProps<T>
+type DOMViewStyles = React.CSSProperties
+type DOMTextProps = React.HTMLAttributes<Text>
+type DOMTextStyles = React.CSSProperties
+
