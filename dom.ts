@@ -83,6 +83,12 @@ export function Ref<P extends React.HTMLAttributes<T>, T>(
     return React.createElement(tag, properties, children)
 }
 
+type OnTapHandler<T> = (event: React.MouseEvent<T, MouseEvent>) => void
+OnTap.styles = { cursor: 'pointer' }
+export function OnTap<T>(handler: OnTapHandler<T>) {
+    return { onClick: handler, style: OnTap.styles }
+}
+
 // Universal Style functions: BoxShadow, Ellipsis...
 ////////////////////////////////////////////////////
 
