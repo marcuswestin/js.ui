@@ -21,7 +21,7 @@ import React from 'react'
 // and causes all its properties, getters and setters to become reactive such that
 // any `makeReactiveUI` function will automatically update on store mutation.
 export function makeStoreReactive(store: any) {
-    makeAutoObservable(store, undefined, { deep:undefined })
+    makeAutoObservable(store, undefined, { deep: undefined })
 }
 
 // makeReactiveUI takes a render function, and re-renders it any time that
@@ -47,29 +47,27 @@ export function observeReactiveStore<T>(reactiveStore: ReactiveStore<T>, fn: Rea
     observe(reactiveStore, fn)
 }
 
-
-
 // Example:
 // --------
 //
 // const store = new class ExampleStore {
 //   private firstName: string | undefined
 //   private lastName: string | undefined
-// 
+//
 //   constructor() {
 //     makeStoreReactive(this)
 //   }
-// 
+//
 //   setName(firstName: string, lastName: string) {
 //     this.firstName = firstName
 //     this.lastName = lastName
 //   }
-// 
+//
 //   get fullName() {
 //     return `${this.firstName || ''} ${this.lastName || ''}`
 //   }
 // }
-// 
+//
 // let App = makeReactiveUI(() => {
 //     return <div>
 //         {store.fullName}

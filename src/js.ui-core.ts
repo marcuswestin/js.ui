@@ -20,19 +20,19 @@ export function processViewArgs(...viewArgs: any[]): ProcessedViewArgs {
 
     processArgsIntoPropsAndChildren(viewProperties, viewChildren, viewArgs)
 
-//TODO
+    //TODO
     // if (viewProperties.key) {
     //     // make explicitly set keys visible in the DOM tree
     //     viewProperties['ui-key'] = viewProperties.key
     // }
 
-//TODO
+    //TODO
     // if (!type) {
     //     // without the dash, React complains about the name casing
     //     type = viewProperties.key+'-'
     // }
 
-//TODO
+    //TODO
     if (flags.ENABLE_DEBUG_BACKGROUNDS) {
         enableDebugBackgrounds(viewProperties)
     }
@@ -41,15 +41,16 @@ export function processViewArgs(...viewArgs: any[]): ProcessedViewArgs {
         enableAutoKeysForChildren(viewChildren)
     }
 
-    viewChildren = (viewChildren.length === 0
-        ? null // React complains if "void" tags (eg input) have non-null viewChildren (even an empty array)
-        : viewChildren)
-    
+    viewChildren =
+        viewChildren.length === 0
+            ? null // React complains if "void" tags (eg input) have non-null viewChildren (even an empty array)
+            : viewChildren
+
     return { viewProperties, viewChildren }
 }
 
 function enableAutoKeysForChildren(children: View[]) {
-    for (var i=0; i<children.length; i++) {
+    for (var i = 0; i < children.length; i++) {
         if (!React.isValidElement(children[i])) {
             continue
         }
@@ -73,29 +74,29 @@ function enableDebugBackgrounds(props: any) {
     }
 }
 
-
 // processArgsIntoPropsAndChildren takes a takes a list of view arguments to process,
 // and populates the given set of view properties and children.
 // React elements are treated as child views.
 // Objects are treated as view properties.
 // And Arrays are unwrapped and recursively processed.
-function processArgsIntoPropsAndChildren(viewProperties: UniversalViewProperties, viewChildren: View[], viewArgsToProcess: ViewArg[]) {
+function processArgsIntoPropsAndChildren(
+    viewProperties: UniversalViewProperties,
+    viewChildren: View[],
+    viewArgsToProcess: ViewArg[],
+) {
     for (let viewArg of viewArgsToProcess) {
         if (!viewArg || typeof viewArg === 'boolean') {
             continue
-
         } else if (React.isValidElement(viewArg)) {
             viewChildren.push(viewArg)
-
         } else if (Array.isArray(viewArg)) {
             processArgsIntoPropsAndChildren(viewProperties, viewChildren, viewArg)
-        // TODO: HACK
+            // TODO: HACK
         } else if ((viewArg as any).__isDOMStyles) {
             mergeInViewProperties(viewProperties, (viewArg as any).props)
         } else if (typeof viewArg === 'object') {
             let propsArg = viewArg as UniversalViewProperties
             mergeInViewProperties(viewProperties, propsArg)
-        
         } else {
             let errorMessage = 'Unexpected properties argument'
             console.error(errorMessage, viewArg, viewArgsToProcess)
@@ -111,19 +112,15 @@ function mergeInViewProperties(viewProperties: UniversalViewProperties, propsArg
     const viewPropertiesAsAny = viewProperties as any
     const propsArgAsAny = propsArg as any
     for (const name in propsArg) {
-
         if (name === 'style') {
             // Allow for multiple style declaration arguments per UI view element
             // by merging together all its style declarations into one
-            viewProperties.style = {...viewProperties.style, ...propsArg.style}
-
+            viewProperties.style = { ...viewProperties.style, ...propsArg.style }
         } else if (name === 'className') {
-          viewProperties.className = `${viewProperties.className || ''} ${propsArg.className}`
-
+            viewProperties.className = `${viewProperties.className || ''} ${propsArg.className}`
         } else if (viewPropertiesAsAny[name] !== undefined) {
             // Non-style properties must not be declared more than once
             throw new Error(`Property key declared twice: ${name}`)
-        
         } else {
             viewPropertiesAsAny[name] = propsArgAsAny[name]
         }

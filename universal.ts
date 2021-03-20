@@ -1,4 +1,8 @@
-export function Flex(flexGrow: number = 1, flexShrink: number | undefined = undefined, flexBasis: number | undefined = undefined) {
+export function Flex(
+    flexGrow: number = 1,
+    flexShrink: number | undefined = undefined,
+    flexBasis: number | undefined = undefined,
+) {
     return Style({ display: 'flex', flexGrow, flexShrink, flexBasis })
 }
 export function FlexFix(size: number) {
@@ -49,7 +53,7 @@ export function BorderRadius(
     })
 }
 
-export function Alpha(alpha=1, red=0, green=0, blue=0) {
+export function Alpha(alpha = 1, red = 0, green = 0, blue = 0) {
     return `rgba(${red},${green},${blue},${alpha})`
 }
 

@@ -14,7 +14,9 @@ export type { View } from './src/js.ui-core'
 ///////////////////////////////////////////////
 
 export function TextView(text: TextValue, styles?: DOMTextStyles, props?: DOMTextProps): View {
-    if (!props) { props = {} }
+    if (!props) {
+        props = {}
+    }
     props.style = Object.assign(props.style || {}, styles)
     return React.createElement('span', props, text.toString())
 }
@@ -29,7 +31,7 @@ export function Col(...args: DOMViewArg<HTMLDivElement>[]): View {
     return makeView('div', Col.styles, ...args)
 }
 
-export function Style<T=HTMLDivElement>(styles: DOMViewStyles): DOMViewProperties<T> {
+export function Style<T = HTMLDivElement>(styles: DOMViewStyles): DOMViewProperties<T> {
     return { style: styles }
 }
 
@@ -81,7 +83,6 @@ export function Ref<P extends React.HTMLAttributes<T>, T>(
     return React.createElement(tag, properties, children)
 }
 
-
 // Universal Style functions: BoxShadow, Ellipsis...
 ////////////////////////////////////////////////////
 
@@ -91,8 +92,13 @@ export function BoxShadow<T>(xOffset: Dim, yOffset: Dim, shadowRadius: Dim, shad
 }
 
 export type EllipsisValue = 'clip' | 'ellipsis' | 'fade' | string | undefined
-export const Ellipsis = function<T=HTMLSpanElement>(value: EllipsisValue = 'ellipsis') {
-    return Style<T>({ display: 'inline', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: value })
+export const Ellipsis = function <T = HTMLSpanElement>(value: EllipsisValue = 'ellipsis') {
+    return Style<T>({
+        display: 'inline',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: value,
+    })
 }
 
 // Internal
@@ -118,4 +124,3 @@ type DOMViewProperties<T> = React.HTMLProps<T>
 type DOMViewStyles = React.CSSProperties
 type DOMTextProps = React.HTMLAttributes<Text>
 type DOMTextStyles = React.CSSProperties
-

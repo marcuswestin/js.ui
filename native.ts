@@ -14,7 +14,9 @@ export type { View } from './src/js.ui-core'
 ///////////////////////////////////////////////
 
 export function TextView(text: TextValue, props?: RN.TextProps, styles?: RN.TextStyle): View {
-    if (!props) { props = {} }
+    if (!props) {
+        props = {}
+    }
     props.style = Object.assign(props.style || {}, styles)
     return React.createElement(RN.Text, props, text.toString())
 }
@@ -72,7 +74,6 @@ export function BoxShadow(xOffset: number, yOffset: number, shadowRadius: number
     let shadowOffset = { width: xOffset, height: yOffset }
     return Style({ shadowColor, shadowOffset, shadowRadius })
 }
-
 
 // Internal
 ///////////
