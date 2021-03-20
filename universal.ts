@@ -14,7 +14,6 @@ export function FlexFix(size: number) {
 
 // Dimension is either a length or a percentage
 type Dimension = number | string
-type Color = string | number
 
 // Padding and margin work different in DOM and Native. Native does not support the
 // 4-value shorthand, but instead has paddingVertical and paddingHorizontal (and the
