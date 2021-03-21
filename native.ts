@@ -70,7 +70,10 @@ export function TextInput(...props: TextInputProps[]) {
 // Universal Style functions: BoxShadow, Ellipsis...
 ////////////////////////////////////////////////////
 
-export function BoxShadow(xOffset: number, yOffset: number, shadowRadius: number, shadowColor: string) {
+export function BoxShadow(xOffset: number, yOffset: number, shadowRadius: number, shadowColor: number | string) {
+    if (typeof shadowColor === 'number') {
+        shadowColor = Alpha(shadowColor)
+    }
     let shadowOffset = { width: xOffset, height: yOffset }
     return Style({ shadowColor, shadowOffset, shadowRadius })
 }

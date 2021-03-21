@@ -92,7 +92,10 @@ export function OnTap<T>(handler: OnTapHandler<T>) {
 // Universal Style functions: BoxShadow, Ellipsis...
 ////////////////////////////////////////////////////
 
-export function BoxShadow<T>(xOffset: Dim, yOffset: Dim, shadowRadius: Dim, shadowColor: string) {
+export function BoxShadow<T>(xOffset: Dim, yOffset: Dim, shadowRadius: Dim, shadowColor: number | string) {
+    if (typeof shadowColor === 'number') {
+        shadowColor = Alpha(shadowColor)
+    }
     let boxShadow = [px(xOffset), px(yOffset), px(shadowRadius), shadowColor].join(' ')
     return Style<T>({ boxShadow: boxShadow })
 }
