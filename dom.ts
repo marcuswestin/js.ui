@@ -3,10 +3,10 @@ import * as aphrodite from 'aphrodite'
 
 import { processViewArgs, TextValue, View } from './src/js.ui-core'
 
-import { FlexFix, Flex, Padding, Margin, Alpha } from './universal'
+import { BorderRadius, FlexFix, Flex, Padding, Margin, Alpha } from './universal'
 import { makeReactiveUI, makeStoreReactive, observeReactiveStore } from './reactive'
 
-export { FlexFix, Flex, Padding, Margin, Alpha }
+export { BorderRadius, FlexFix, Flex, Padding, Margin, Alpha }
 export { makeReactiveUI, makeStoreReactive, observeReactiveStore }
 export type { View } from './src/js.ui-core'
 
