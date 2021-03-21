@@ -18,17 +18,17 @@ export function TextView(text: TextValue, styles?: DOMTextStyles, props?: DOMTex
         props = {}
     }
     props.style = Object.assign(props.style || {}, styles)
-    return React.createElement('span', props, text.toString())
+    return React.createElement('ui-text', props, text.toString())
 }
 
 Row.styles = Style<HTMLDivElement>({ display: 'flex', flexDirection: 'row' })
 export function Row(...args: DOMViewArg<HTMLDivElement>[]): View {
-    return makeView('div', Row.styles, ...args)
+    return makeView('ui-row', Row.styles, ...args)
 }
 
 Col.styles = Style<HTMLDivElement>({ display: 'flex', flexDirection: 'column' })
 export function Col(...args: DOMViewArg<HTMLDivElement>[]): View {
-    return makeView('div', Col.styles, ...args)
+    return makeView('ui-col', Col.styles, ...args)
 }
 
 export function Style<T = HTMLDivElement>(styles: DOMViewStyles): DOMViewProperties<T> {
