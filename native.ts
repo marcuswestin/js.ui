@@ -1,14 +1,12 @@
 import React from 'react'
 import * as RN from 'react-native'
-
-import { processViewArgs, TextValue, View } from './src/js.ui-core'
-
-import { BorderRadius, FlexFix, Flex, Padding, Margin, Alpha } from './universal'
 import { makeReactiveUI, makeStoreReactive, observeReactiveStore } from './reactive'
+import { processViewArgs, setTextViewMaker, TextValue, View } from './src/js.ui-core'
+import { Alpha, BorderRadius, Flex, FlexFix, Margin, Padding } from './universal'
 
+export type { View } from './src/js.ui-core'
 export { BorderRadius, FlexFix, Flex, Padding, Margin, Alpha }
 export { makeReactiveUI, makeStoreReactive, observeReactiveStore }
-export type { View } from './src/js.ui-core'
 
 // Universal: TextView, Row, Col, Style, etc...
 ///////////////////////////////////////////////
