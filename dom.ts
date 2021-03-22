@@ -89,7 +89,13 @@ export function OnTap<T>(handler: OnTapHandler<T>) {
     return { onClick: handler, style: OnTap.styles }
 }
 
-ScrollCol.styles = Style<HTMLDivElement>({ display: 'flex', flexGrow:1, flexDirection: 'column', overflowY:'auto', height:0 })
+ScrollCol.styles = Style<HTMLDivElement>({
+    display: 'flex',
+    flexGrow: 1,
+    flexDirection: 'column',
+    overflowY: 'auto',
+    height: 0,
+})
 export function ScrollCol(...args: DOMViewArg<HTMLDivElement>[]): View {
     return makeView('ui-scroll-col', ScrollCol.styles, ...args)
 }
