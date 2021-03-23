@@ -16,15 +16,15 @@ export function TextView(text: TextValue, styles?: DOMTextStyles, props?: DOMTex
         props = {}
     }
     props.style = Object.assign(props.style || {}, styles)
-    return React.createElement('ui-text', props, text.toString())
+    return React.createElement('span', props, text.toString())
 }
 
 export function Row<T = HTMLDivElement>(...args: DOMViewArg<T>[]): View {
-    return makeView('ui-row', styles.Row, ...args)
+    return makeView('div', styles.Row, ...args)
 }
 
 export function Col<T = HTMLDivElement>(...args: DOMViewArg<T>[]): View {
-    return makeView('ui-col', styles.Col, ...args)
+    return makeView('div', styles.Col, ...args)
 }
 
 export function Style<T = HTMLDivElement>(styles: DOMViewStyles): DOMViewProperties<T> {
@@ -97,7 +97,7 @@ export function OnTap<T>(handler: OnTapHandler<T>) {
 }
 
 export function ScrollCol(...args: DOMViewArg<HTMLDivElement>[]): View {
-    return makeView('ui-scroll-col', styles.ScrollCol, ...args)
+    return makeView('div', styles.ScrollCol, ...args)
 }
 
 // Universal Style functions: BoxShadow, Ellipsis...
@@ -128,8 +128,11 @@ function makeView<T>(tagName: string, ...viewArgs: DOMViewArg<T>[]) {
     const { viewProperties, viewChildren, viewStylesheets } = processViewArgs(...viewArgs)
     if (viewStylesheets.length) {
         const className = aphrodite.css(...viewStylesheets)
-        // eslint-disable-next-line dot-notation
-        viewProperties['class'] = (viewProperties['class'] ? viewProperties['class'] + ' ' : '') + className
+        if (viewProperties.className) {
+            viewProperties.className += ' ' + className
+        } else {
+            viewProperties.className = className
+        }
     }
     return React.createElement(tagName, viewProperties, viewChildren)
 }
