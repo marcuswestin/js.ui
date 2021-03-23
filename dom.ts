@@ -19,14 +19,12 @@ export function TextView(text: TextValue, styles?: DOMTextStyles, props?: DOMTex
     return React.createElement('ui-text', props, text.toString())
 }
 
-Row.styles = Style<HTMLDivElement>({ display: 'flex', flexDirection: 'row' })
-export function Row(...args: DOMViewArg<HTMLDivElement>[]): View {
-    return makeView('ui-row', Row.styles, ...args)
+export function Row<T = HTMLDivElement>(...args: DOMViewArg<T>[]): View {
+    return makeView('ui-row', styles.Row, ...args)
 }
 
-Col.styles = Style<HTMLDivElement>({ display: 'flex', flexDirection: 'column' })
-export function Col(...args: DOMViewArg<HTMLDivElement>[]): View {
-    return makeView('ui-col', Col.styles, ...args)
+export function Col<T = HTMLDivElement>(...args: DOMViewArg<T>[]): View {
+    return makeView('ui-col', styles.Col, ...args)
 }
 
 export function Style<T = HTMLDivElement>(styles: DOMViewStyles): DOMViewProperties<T> {
@@ -36,29 +34,41 @@ export function Style<T = HTMLDivElement>(styles: DOMViewStyles): DOMViewPropert
 // Universal StyleSheets
 ////////////////////////
 
-type StyleSheetProperties = aphrodite.CSSProperties
-export function makeStyleSheet(...styles: StyleSheetProperties[]): DOMStyles {
-    let combinedStyles: StyleSheetProperties = {}
-    for (let style of styles) {
-        if ((style as any).style) {
-            style = (style as any).style
-        }
-        combinedStyles = { ...combinedStyles, ...style }
+export function makeStyleSheet<T>(styles: aphrodite.StyleDeclaration<T>): { [K in keyof T]: DOMStyles } {
+    const styleSheets = aphrodite.StyleSheet.create(styles) as any
+    const result: any = {}
+    for (const key of Object.keys(styleSheets)) {
+        result[key] = new DOMStyles(styleSheets[key])
     }
-
-    const styleSheet = aphrodite.StyleSheet.create({ a: combinedStyles })
-    return new DOMStyles(styleSheet.a)
+    return result
 }
 
 export class DOMStyles {
-    constructor(private style: aphrodite.StyleDeclarationValue) {}
+    constructor(readonly styles: aphrodite.StyleDeclarationValue) {}
 
     readonly __isDOMStyles = true
-
-    get props() {
-        return { className: aphrodite.css(this.style) }
-    }
 }
+
+const styles = makeStyleSheet({
+    Col: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    Row: {
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    ScrollCol: {
+        display: 'flex',
+        flexGrow: 1,
+        flexDirection: 'column',
+        overflowY: 'auto',
+        height: 0,
+    },
+    OnTap: {
+        cursor: 'pointer',
+    },
+})
 
 // View helpers: Buttons, Inputs...
 ///////////////////////////////////
@@ -82,20 +92,12 @@ export function Ref<P extends React.HTMLAttributes<T>, T>(
 }
 
 type OnTapHandler<T> = (event: React.MouseEvent<T, MouseEvent>) => void
-OnTap.styles = { cursor: 'pointer' }
 export function OnTap<T>(handler: OnTapHandler<T>) {
-    return { onClick: handler, style: OnTap.styles }
+    return [{ onClick: handler }, styles.OnTap]
 }
 
-ScrollCol.styles = Style<HTMLDivElement>({
-    display: 'flex',
-    flexGrow: 1,
-    flexDirection: 'column',
-    overflowY: 'auto',
-    height: 0,
-})
 export function ScrollCol(...args: DOMViewArg<HTMLDivElement>[]): View {
-    return makeView('ui-scroll-col', ScrollCol.styles, ...args)
+    return makeView('ui-scroll-col', styles.ScrollCol, ...args)
 }
 
 // Universal Style functions: BoxShadow, Ellipsis...
@@ -123,7 +125,12 @@ export const Ellipsis = function <T = HTMLSpanElement>(value: EllipsisValue = 'e
 ///////////
 
 function makeView<T>(tagName: string, ...viewArgs: DOMViewArg<T>[]) {
-    const { viewProperties, viewChildren } = processViewArgs(...viewArgs)
+    const { viewProperties, viewChildren, viewStylesheets } = processViewArgs(...viewArgs)
+    if (viewStylesheets.length) {
+        const className = aphrodite.css(...viewStylesheets)
+        // eslint-disable-next-line dot-notation
+        viewProperties['class'] = (viewProperties['class'] ? viewProperties['class'] + ' ' : '') + className
+    }
     return React.createElement(tagName, viewProperties, viewChildren)
 }
 

@@ -13,12 +13,14 @@ type UniversalViewProperties = any
 type ProcessedViewArgs = {
     viewProperties: UniversalViewProperties
     viewChildren: View[] | null
+    viewStylesheets: any[]
 }
 export function processViewArgs(...viewArgs: any[]): ProcessedViewArgs {
     let viewProperties: UniversalViewProperties = {}
     let viewChildren: View[] | null = []
+    let viewStylesheets: any[] = []
 
-    processArgsIntoPropsAndChildren(viewProperties, viewChildren, viewArgs)
+    processArgsIntoPropsAndChildren(viewProperties, viewChildren, viewStylesheets, viewArgs)
 
     //TODO
     // if (viewProperties.key) {
@@ -46,7 +48,7 @@ export function processViewArgs(...viewArgs: any[]): ProcessedViewArgs {
             ? null // React complains if "void" tags (eg input) have non-null viewChildren (even an empty array)
             : viewChildren
 
-    return { viewProperties, viewChildren }
+    return { viewProperties, viewChildren, viewStylesheets }
 }
 
 function enableAutoKeysForChildren(children: View[]) {
@@ -82,6 +84,7 @@ function enableDebugBackgrounds(props: any) {
 function processArgsIntoPropsAndChildren(
     viewProperties: UniversalViewProperties,
     viewChildren: View[],
+    viewStylesheets: any[],
     viewArgsToProcess: ViewArg[],
 ) {
     for (let viewArg of viewArgsToProcess) {
@@ -90,10 +93,10 @@ function processArgsIntoPropsAndChildren(
         } else if (React.isValidElement(viewArg)) {
             viewChildren.push(viewArg)
         } else if (Array.isArray(viewArg)) {
-            processArgsIntoPropsAndChildren(viewProperties, viewChildren, viewArg)
+            processArgsIntoPropsAndChildren(viewProperties, viewChildren, viewStylesheets, viewArg)
             // TODO: HACK
         } else if ((viewArg as any).__isDOMStyles) {
-            mergeInViewProperties(viewProperties, (viewArg as any).props)
+            viewStylesheets.push((viewArg as any).styles)
         } else if (typeof viewArg === 'object') {
             let propsArg = viewArg as UniversalViewProperties
             mergeInViewProperties(viewProperties, propsArg)
