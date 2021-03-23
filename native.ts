@@ -1,7 +1,7 @@
 import React from 'react'
 import * as RN from 'react-native'
 import { makeReactiveUI, makeStoreReactive, observeReactiveStore } from './reactive'
-import { processViewArgs, setTextViewMaker, TextValue, View } from './src/js.ui-core'
+import { processViewArgs, TextValue, View } from './src/js.ui-core'
 import { Alpha, BorderRadius, Flex, FlexFix, Margin, Padding } from './universal'
 
 export type { View } from './src/js.ui-core'
