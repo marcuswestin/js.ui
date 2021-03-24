@@ -102,6 +102,7 @@ function processArgsIntoPropsAndChildren(
             mergeInViewProperties(viewProperties, propsArg)
         } else {
             let errorMessage = 'Unexpected properties argument'
+            // eslint-disable-next-line no-console
             console.error(errorMessage, viewArg, viewArgsToProcess)
             throw new Error(errorMessage)
         }
