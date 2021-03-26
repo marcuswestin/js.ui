@@ -34,6 +34,10 @@ export function makeReactiveUI<F extends Function>(fn: F): any {
     let ObservedElement = observer((props: any) => {
         return fn(...props.jsuiArgs)
     })
+    if (fn.name) {
+        // Workaround: see https://github.com/facebook/react/issues/18026#issue-564002984 for explanation
+        ;(ObservedElement as any).type.displayName = fn.name
+    }
     return function (...args: any[]) {
         return React.createElement(ObservedElement, { jsuiArgs: args })
     }
@@ -68,7 +72,7 @@ export function observeReactiveStore<T>(reactiveStore: ReactiveStore<T>, fn: Rea
 //   }
 // }
 //
-// let App = makeReactiveUI(() => {
+// let App = makeReactiveUI(function AppView() {
 //     return <div>
 //         {store.fullName}
 //         <button onClick={store.setName("Alice", "Wonderland")} />
