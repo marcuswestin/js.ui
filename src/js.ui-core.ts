@@ -60,7 +60,7 @@ function enableAutoKeysForChildren(children: View[]) {
         if (child.key) {
             continue
         }
-        let key = `${i}`
+        let key = `ui-auto-key-${i}`
         children[i] = React.cloneElement(child, { key: key, 'ui-auto-key': key })
     }
 }
