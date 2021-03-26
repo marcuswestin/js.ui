@@ -1,3 +1,5 @@
+import React from 'react'
+
 export function Flex(
     flexGrow: number = 1,
     flexShrink: number | undefined = undefined,
@@ -7,6 +9,12 @@ export function Flex(
 }
 export function FlexFix(size: number) {
     return Style({ flexGrow: 0, flexShrink: 0, flexBasis: size })
+}
+
+export type Key = { key: React.Key }
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export let Key = (key: string | number): Key => {
+    return { key }
 }
 
 // Universal style helper functions

@@ -2,10 +2,10 @@ import React from 'react'
 import * as RN from 'react-native'
 import { makeReactiveUI, makeStoreReactive, observeReactiveStore } from './reactive'
 import { processViewArgs, TextValue, View } from './src/js.ui-core'
-import { Alpha, BorderRadius, Flex, FlexFix, Margin, Padding } from './universal'
+import { Alpha, BorderRadius, Flex, FlexFix, Key, Margin, Padding } from './universal'
 
 export type { View } from './src/js.ui-core'
-export { BorderRadius, FlexFix, Flex, Padding, Margin, Alpha }
+export { Alpha, BorderRadius, Flex, FlexFix, Key, Margin, Padding }
 export { makeReactiveUI, makeStoreReactive, observeReactiveStore }
 
 // Universal: TextView, Row, Col, Style, etc...
@@ -79,7 +79,7 @@ export function BoxShadow(xOffset: number, yOffset: number, shadowRadius: number
 // Internal
 ///////////
 
-type NativeViewArg = RN.ViewProps | View | NativeViewArg[]
+type NativeViewArg = RN.ViewProps | View | NativeViewArg[] | Key
 function makeView(...viewArgs: NativeViewArg[]) {
     const { viewProperties, viewChildren } = processViewArgs(...viewArgs)
     return React.createElement(RN.View, viewProperties, viewChildren)
