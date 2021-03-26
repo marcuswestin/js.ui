@@ -11,9 +11,8 @@ export function FlexFix(size: number) {
     return Style({ flexGrow: 0, flexShrink: 0, flexBasis: size })
 }
 
-export type Key = { key: React.Key }
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export let Key = (key: string | number): Key => {
+export type KeyProp = { key: React.Key }
+export let Key = (key: string | number): KeyProp => {
     return { key }
 }
 
