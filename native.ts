@@ -34,6 +34,33 @@ export function Style(styles: RN.ViewStyle): RN.ViewProps {
     return { style: styles }
 }
 
+// ListView
+///////////
+
+type ListItemSeperators = {
+    highlight: () => void
+    unhighlight: () => void
+    updateProps: (select: 'leading' | 'trailing', newProps: any) => void
+}
+type RenderListViewItem<ItemT> = (item: ItemT, index?: number, seperators?: ListItemSeperators) => View
+type KeyForListItem<ItemT> = (item: ItemT, index?: number) => string | number
+type ListViewProps<ItemT> = {
+    renderItem: RenderListViewItem<ItemT>
+    keyForItem: KeyForListItem<ItemT>
+}
+export function ListView<ItemT>(data: ItemT[], props: ListViewProps<ItemT>) {
+    let renderItem: RN.ListRenderItem<ItemT> | null | undefined = ({ item, index, separators }) => {
+        let view = props.renderItem(item as ItemT, index, separators)
+        return React.isValidElement(view) ? view : null
+    }
+    let keyExtractor = function (item: ItemT, index: number) {
+        return props.keyForItem(item, index).toString()
+    }
+
+    let flatListProps: RN.FlatListProps<ItemT> = { data, renderItem, keyExtractor }
+    return React.createElement<RN.FlatListProps<ItemT>>(RN.FlatList, flatListProps)
+}
+
 // Universal StyleSheets
 ////////////////////////
 
