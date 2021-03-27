@@ -79,11 +79,15 @@ export function makeStyleSheet<T extends NamedStyles<T> | NamedStyles<any>>(
 // View helpers: Buttons, Inputs...
 ///////////////////////////////////
 
-export function Button(text: TextValue, onPress: () => void) {
-    return React.createElement(RN.Button, {
-        title: text.toString(),
-        onPress: onPress,
-    })
+export type ButtonProps = Omit<RN.ButtonProps, 'title' | 'onPress'>
+export function Button(text: TextValue, props: ButtonProps, onPress: () => void) {
+    return React.createElement(
+        RN.Button,
+        Object.assign(props, {
+            title: text.toString(),
+            onPress: onPress,
+        }),
+    )
 }
 
 export type TextInputProps = RN.TextInputProps
