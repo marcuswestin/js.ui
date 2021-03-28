@@ -103,6 +103,10 @@ export function TextInput(...props: TextInputProps[]) {
     return React.createElement(RN.TextInput, mergedProps)
 }
 
+export function Touchable(content: View, onPress: () => void) {
+    return React.createElement(RN.TouchableOpacity, { onPress }, content)
+}
+
 // Universal Style functions: BoxShadow, Ellipsis...
 ////////////////////////////////////////////////////
 
