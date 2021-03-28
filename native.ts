@@ -48,6 +48,7 @@ type ListViewProps<ItemT> = {
     keyForItem: KeyForListItem<ItemT>
     horizontal?: boolean
 }
+// TODO: Make this take a RN.FlatListProps with some props re-written instead (e.g for horizontal)
 export function ListView<ItemT>(data: ItemT[], props: ListViewProps<ItemT>) {
     let renderItem: RN.ListRenderItem<ItemT> | null | undefined = ({ item, index, separators }) => {
         let view = props.renderItem(item as ItemT, index, separators)
