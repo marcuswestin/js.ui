@@ -46,6 +46,7 @@ type KeyForListItem<ItemT> = (item: ItemT, index?: number) => string | number
 type ListViewProps<ItemT> = {
     renderItem: RenderListViewItem<ItemT>
     keyForItem: KeyForListItem<ItemT>
+    horizontal?: boolean
 }
 export function ListView<ItemT>(data: ItemT[], props: ListViewProps<ItemT>) {
     let renderItem: RN.ListRenderItem<ItemT> | null | undefined = ({ item, index, separators }) => {
@@ -56,7 +57,7 @@ export function ListView<ItemT>(data: ItemT[], props: ListViewProps<ItemT>) {
         return props.keyForItem(item, index).toString()
     }
 
-    let flatListProps: RN.FlatListProps<ItemT> = { data, renderItem, keyExtractor }
+    let flatListProps: RN.FlatListProps<ItemT> = { data, renderItem, keyExtractor, horizontal: props.horizontal }
     return React.createElement<RN.FlatListProps<ItemT>>(RN.FlatList, flatListProps)
 }
 
