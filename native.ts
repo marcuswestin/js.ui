@@ -42,7 +42,7 @@ type ListItemSeperators = {
     updateProps: (select: 'leading' | 'trailing', newProps: any) => void
 }
 type RenderListViewItem<ItemT> = (item: ItemT, index?: number, seperators?: ListItemSeperators) => View
-type KeyForListItem<ItemT> = (item: ItemT, index?: number) => string | number
+type KeyForListItem<ItemT> = (item: ItemT, index: number) => string | number
 type ListViewProps<ItemT> = {
     renderItem: RenderListViewItem<ItemT>
     keyForItem: KeyForListItem<ItemT>
