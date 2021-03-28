@@ -61,6 +61,12 @@ export function ListView<ItemT>(data: ItemT[], props: ListViewProps<ItemT>) {
     return React.createElement<RN.FlatListProps<ItemT>>(RN.FlatList, flatListProps)
 }
 
+type ImageProps = RN.ImageProps
+export function Image(url: string, width: number, height: number) {
+    let props: ImageProps = { source: { uri: url }, style: { width, height } }
+    return React.createElement(RN.Image, props)
+}
+
 // Universal StyleSheets
 ////////////////////////
 
