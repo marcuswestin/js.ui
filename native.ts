@@ -68,6 +68,11 @@ export function Image(url: string, width: number, height: number) {
     return React.createElement(RN.Image, props)
 }
 
+export function ScrollView(props: RN.ScrollViewProps, ...content: NativeViewArg[]) {
+    const { viewProperties, viewChildren } = processViewArgs(props, ...content)
+    return React.createElement(RN.ScrollView, viewProperties, viewChildren)
+}
+
 // Universal StyleSheets
 ////////////////////////
 
