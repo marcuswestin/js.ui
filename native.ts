@@ -15,7 +15,7 @@ export function TextView(text: TextValue, props?: RN.TextProps, styles?: RN.Text
     if (!props) {
         props = {}
     }
-    props.style = Object.assign(props.style || {}, styles)
+    props.style = Object.assign({}, props.style, styles)
     return React.createElement(RN.Text, props, text.toString())
 }
 

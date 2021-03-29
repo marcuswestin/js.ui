@@ -65,10 +65,10 @@ function enableDebugBackgrounds(props: any) {
     if (props.style == null) {
         props.style = {}
     }
-    if (props.style.background == null) {
+    if (props.style.background == null && props.style.backgroundColor == null) {
         let randRBG = () => Math.random() * 255
         let colors = [randRBG(), randRBG(), randRBG(), 0.75]
-        props.style.background = `rgba(${colors.join(',')})`
+        props.style.backgroundColor = `rgba(${colors.join(',')})`
     }
 }
 
