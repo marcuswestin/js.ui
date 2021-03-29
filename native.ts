@@ -104,8 +104,25 @@ export function TextInput(...props: TextInputProps[]) {
     return React.createElement(RN.TextInput, mergedProps)
 }
 
-export function Touchable(content: View, onPress: () => void) {
-    return React.createElement(RN.TouchableOpacity, { onPress }, content)
+export function TouchableFill(content: View, onPress: () => void) {
+    return React.createElement(
+        RN.TouchableOpacity,
+        {
+            onPress,
+            style: {
+                flex: 1,
+                alignSelf: 'stretch',
+                alignItems: 'center',
+                alignContent: 'center',
+                justifyContent: 'center',
+            },
+        },
+        content,
+    )
+}
+
+export function Touchable(props: RN.TouchableOpacityProps, ...content: View[]) {
+    return React.createElement(RN.TouchableOpacity, props, content)
 }
 
 // Universal Style functions: BoxShadow, Ellipsis...
