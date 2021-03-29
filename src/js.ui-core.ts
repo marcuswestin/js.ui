@@ -17,7 +17,7 @@ type ProcessedViewArgs = {
 }
 export function processViewArgs(...viewArgs: any[]): ProcessedViewArgs {
     let viewProperties: UniversalViewProperties = {}
-    let viewChildren: View[] | null = []
+    let viewChildren: React.ReactElement[] | null = []
     let viewStylesheets: any[] = []
 
     processArgsIntoPropsAndChildren(viewProperties, viewChildren, viewStylesheets, viewArgs)
@@ -43,19 +43,15 @@ export function processViewArgs(...viewArgs: any[]): ProcessedViewArgs {
         enableAutoKeysForChildren(viewChildren)
     }
 
-    viewChildren =
-        viewChildren.length === 0
-            ? null // React complains if "void" tags (eg input) have non-null viewChildren (even an empty array)
-            : viewChildren
+    if (viewChildren.length === 0) {
+        viewChildren = null
+    }
 
     return { viewProperties, viewChildren, viewStylesheets }
 }
 
-function enableAutoKeysForChildren(children: View[]) {
+function enableAutoKeysForChildren(children: React.ReactElement[]) {
     for (var i = 0; i < children.length; i++) {
-        if (!React.isValidElement(children[i])) {
-            continue
-        }
         let child = children[i] as React.ReactElement
         if (child.key) {
             continue
@@ -83,7 +79,7 @@ function enableDebugBackgrounds(props: any) {
 // And Arrays are unwrapped and recursively processed.
 function processArgsIntoPropsAndChildren(
     viewProperties: UniversalViewProperties,
-    viewChildren: View[],
+    viewChildren: React.ReactElement[],
     viewStylesheets: any[],
     viewArgsToProcess: ViewArg[],
 ) {
