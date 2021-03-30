@@ -126,8 +126,13 @@ export function TouchableFill(content: View, onPress: () => void) {
     )
 }
 
-export function Touchable(props: RN.TouchableOpacityProps, ...content: View[]) {
-    return React.createElement(RN.TouchableOpacity, props, content)
+export type TouchableProps = RN.TouchableOpacityProps
+export function Touchable(props: TouchableProps, ...args: View[]) {
+    const { viewProperties, viewChildren } = processViewArgs(args)
+    // TODO: Remove hack
+    props.activeOpacity = 0.35
+    Object.assign(viewProperties, props)
+    return React.createElement(RN.TouchableOpacity, props, viewChildren)
 }
 
 // Universal Style functions: BoxShadow, Ellipsis...
