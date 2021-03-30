@@ -1,6 +1,7 @@
 import React from 'react'
 import * as RN from 'react-native'
 import { makeReactiveUI, makeStoreReactive, observeReactiveStore } from './reactive'
+import deepMerge from './src/deep-merge'
 import { processViewArgs, TextValue, View } from './src/js.ui-core'
 import { Alpha, BorderRadius, Flex, FlexFix, Key, KeyProp, Margin, Padding } from './universal'
 
@@ -11,12 +12,12 @@ export { makeReactiveUI, makeStoreReactive, observeReactiveStore }
 // Universal: TextView, Row, Col, Style, etc...
 ///////////////////////////////////////////////
 
-export function TextView(text: TextValue, props?: RN.TextProps, styles?: RN.TextStyle): View {
-    if (!props) {
-        props = {}
-    }
-    props.style = Object.assign({}, props.style, styles)
-    return React.createElement(RN.Text, props, text.toString())
+export type TextViewProps = RN.TextProps
+type TextViewArg = TextViewProps | undefined
+export function TextView(text: TextValue, ...props: TextViewArg[]): View {
+    let filteredProps = props.filter((prop) => !!prop) as TextViewProps[]
+    let mergedProps = deepMerge(...filteredProps)
+    return React.createElement(RN.Text, mergedProps, text.toString())
 }
 
 Row.styles = Style({ display: 'flex', flexDirection: 'row' })
