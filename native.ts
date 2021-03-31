@@ -50,7 +50,7 @@ type ListViewProps<ItemT> = {
     horizontal?: boolean
 }
 // TODO: Make this take a RN.FlatListProps with some props re-written instead (e.g for horizontal)
-export function ListView<ItemT>(data: ItemT[], props: ListViewProps<ItemT>) {
+export function ListView<ItemT>(data: ItemT[], props: ListViewProps<ItemT>, flatListProps?: RN.FlatListProps<ItemT>) {
     let renderItem: RN.ListRenderItem<ItemT> | null | undefined = ({ item, index, separators }) => {
         let view = props.renderItem(item as ItemT, index, separators)
         return React.isValidElement(view) ? view : null
@@ -59,8 +59,8 @@ export function ListView<ItemT>(data: ItemT[], props: ListViewProps<ItemT>) {
         return props.keyForItem(item, index).toString()
     }
 
-    let flatListProps: RN.FlatListProps<ItemT> = { data, renderItem, keyExtractor, horizontal: props.horizontal }
-    return React.createElement<RN.FlatListProps<ItemT>>(RN.FlatList, flatListProps)
+    let rnProps = Object.assign({ data, renderItem, keyExtractor, horizontal: props.horizontal }, flatListProps)
+    return React.createElement<RN.FlatListProps<ItemT>>(RN.FlatList, rnProps)
 }
 
 type ImageProps = RN.ImageProps
