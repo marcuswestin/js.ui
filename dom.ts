@@ -75,6 +75,7 @@ const styles = makeStyleSheet({
 
 export let Button = makeViewConstructor<HTMLButtonElement>('button')
 export let Div = makeViewConstructor<HTMLDivElement>('div')
+export let Pre = makeViewConstructor<HTMLDivElement>('pre')
 export let Span = makeViewConstructor<HTMLSpanElement>('span')
 export let TextArea = makeViewConstructor<HTMLTextAreaElement>('textarea')
 export let Form = makeViewConstructor<HTMLFormElement>('form')
