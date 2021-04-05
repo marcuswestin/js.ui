@@ -104,7 +104,8 @@ export function Button(text: TextValue, props: ButtonProps, onPress: () => void)
     )
 }
 
-export type TextInputProps = RN.TextInputProps
+export type TextInputProps = RN.TextInputProps & { ref?: any } // HACK: Support ref for focusing on next
+export type TextInput = React.CElement<RN.TextInputProps, RN.TextInput> & { focus: () => void } // HACK: support manual focusing
 export function TextInput(...props: TextInputProps[]) {
     const mergedProps = Object.assign({}, ...props)
     return React.createElement(RN.TextInput, mergedProps)
