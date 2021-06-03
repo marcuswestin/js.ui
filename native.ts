@@ -9,6 +9,8 @@ export type { View } from './src/js.ui-core'
 export { Alpha, BorderRadius, Flex, FlexFix, Key, Margin, Padding }
 export { makeReactiveUI, makeStoreReactive, observeReactiveStore }
 
+export const ReactView = React.createElement
+
 // Universal: TextView, Row, Col, Style, etc...
 ///////////////////////////////////////////////
 
