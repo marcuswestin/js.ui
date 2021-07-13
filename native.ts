@@ -32,6 +32,11 @@ export function Col(...args: NativeViewArg[]): View {
     return makeView(Col.styles, ...args)
 }
 
+Spacer.styles = Style({ display: 'flex', flexBasis: 10, flexGrow: 0, flexShrink: 0 })
+export function Spacer(...args: NativeViewArg[]): View {
+    return makeView(Spacer.styles, ...args)
+}
+
 export function Style(styles: RN.ViewStyle): RN.ViewProps {
     return { style: styles }
 }
